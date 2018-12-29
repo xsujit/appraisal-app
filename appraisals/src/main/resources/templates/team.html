@@ -1,0 +1,56 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
+<head>
+	<link href="/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+    <title>Mastek appraisal | Your peers</title>
+</head>
+<body>
+<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Team')"></nav>
+<main role="main" class="container" layout:fragment="content">
+
+	<div class="jumbotron mb-3 p-4" th:object="${appraisalCategory}" th:with="year=*{appraisalYear}, type=*{appraisalType}">
+		<h1>Appraisal <small class="text-muted"	th:text="${' Year ' + #temporals.year(year.year) + ' | ' + type.description}"></small></h1>
+		<p>Here you can view all your team members and an option to review their appraisal</p>
+	</div>
+	<input class="form-control" id="myInput" type="text" placeholder="Search.." autofocus>
+	<br>
+	<table class="table table-striped">
+	    <thead>
+	      <tr>
+	      	<th>Sr. No</th>
+	      	<th>Employee Id</th>
+	        <th>First Name</th>
+	        <th>Last Name</th>
+	        <th>Appraisal</th>
+	        <th>My Vote</th>
+	      </tr>
+	    </thead>
+	    <tbody id="myTable">
+	      <tr th:each="each, itemStat : ${team}" th:with="category=${each.value.appraisal?.appraisalPk?.appraisalCategory}">
+	      	<td th:text="${itemStat.index+1}"></td>
+	      	<td th:text="${each.key}"></td>
+	        <td th:text="${each.value.employee.firstName}"></td>
+	        <td th:text="${each.value.employee.lastName}"></td>
+	        <td><a th:href="@{/team/__${#temporals.year(category?.appraisalYear?.year)}__/__${category?.appraisalType?.type}__/__${each.key}__}" class="btn btn-info" th:classappend="${each.value.appraisal == null} ? 'disabled'" role="button">View</a></td>
+	        <td><span th:if="${each.value.vote}" class="mx-4 oi oi-check"></span></td>
+	      </tr>
+	    </tbody>
+  	</table>
+  	<script>
+	$(document).ready(function(){
+	  $("#myInput").on("keyup", function() {
+	    var value = $(this).val().toLowerCase();
+	    $("#myTable tr").filter(function() {
+	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+	    });
+	  });
+	});
+	</script>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+</main> <!-- /.container -->
+</body>
+</html>

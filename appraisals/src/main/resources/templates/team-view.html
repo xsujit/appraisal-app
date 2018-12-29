@@ -1,0 +1,123 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
+<head>
+	<link href="/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/jodit/3.1.95/jodit.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jodit/3.1.95/jodit.min.js"></script>
+    <title>View your appraisal</title>
+</head>
+<body>
+<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Team')"></nav>
+<main role="main" class="container" layout:fragment="content">
+
+	<div th:if="${message}" class="alert" th:classappend="${cssClass + ' alert-dismissible fade show'}" role="alert">
+	  <strong th:text="${cssClass == 'alert-success' ? 'Success! ' : 'Error! '}"></strong>[[${message}]]
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	</div>	
+
+	<div class="jumbotron mb-3 p-4" th:object="${appraisalCategory}" th:with="type=*{appraisalType.description}, year=*{appraisalYear.year}">
+		<h1>Appraisal <small class="text-muted"	th:text="${' Year ' + #temporals.year(year) + ' | ' + type}"></small></h1>
+		<p>Review | Comment | Vote</p>
+	</div>
+
+	<div th:object="${employee}">
+		<div class="card bg-light">
+			<div class="card-header">Employee Details</div>
+			<div class="card-body">
+				<table class="table table-borderless table-sm">
+					<tr>
+						<th scope="row">Name</th>
+						<td class="text-capitalize" th:text="${#strings.toString(employee)}"></td>
+						<th scope="row">Project IO</th>
+						<td th:text="*{project.id}"></td>
+					</tr>
+					<tr>
+						<th scope="row">Employee ID</th>
+						<td th:text="*{id}"></td>
+						<th scope="row">Project Title</th>
+						<td th:text="*{project.title}"></td>							
+					</tr>
+					<tr>
+						<th scope="row">Location</th>
+						<td class="text-capitalize" th:text="*{location}"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="mt-3 mb-1"><span class="font-weight-bold mt-3">Appraisal</span></div>
+	<div class="form-group" th:object="${appraisal}">
+		<textarea class="form-control" name="description" th:text="*{description}" id="editor"></textarea>
+		<small id="descriptionHelp" class="form-text text-muted ml-2">Signed off: [[*{#temporals.format(lastUpdateDate, 'dd-MM-yyyy HH:mm:ss')}]]</small>
+	</div>	
+	
+	<div><span class="font-weight-bold">Comments</span></div>
+	<div class="media border my-3 p-3 shadow bg-light text-dark rounded" th:each="comment, iStat : ${comments}" th:object="${comment}" th:with="fullName=*{#strings.toString(commentId.commenter)}">
+		<img th:if="${iStat.odd}" src="/images/img_avatar3.png" th:alt="${fullName}" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+	    <div class="media-body">
+			<h5 th:class="${iStat.even} ? 'text-right'" th:classappend="${'text-info'}">[[${fullName}]] <small class="text-secondary font-italic">Posted on [[*{#temporals.format(submitDate, 'dd-MM-yyyy HH:mm:ss')}]]</small></h5>
+			<p th:class="${iStat.even} ? 'text-right'" th:text="*{message}"></p>
+	    </div>
+	    <img th:if="${iStat.even}" src="/images/img_avatar3.png" th:alt="${fullName}" class="ml-3 mt-3 rounded-circle" style="width:60px;">
+	</div>	 
+	 
+	<div th:with="currentUrl=${#httpServletRequest.requestURI}" th:remove="tag">
+	<form th:action="@{${#fields.hasErrors()} ? ${currentUrl} : ${currentUrl + '/comment'}}" method="post" th:object="${comment}">
+	<div class="media border my-3 pt-3 px-3 shadow bg-light text-dark rounded" th:with="parity=${#lists.size(comments) % 2}">
+	    <img th:if="${parity == 0}" src="/images/img_avatar3.png" alt="Me" class="mr-3 rounded-circle" style="width:60px;">
+	    <div class="media-body form-group">
+	      <textarea class="form-control" rows="1" th:field="*{message}" placeholder="Post a comment"></textarea>
+	      <p class="text-danger" th:if="${#fields.hasErrors('*{message}')}" th:errors="*{message}">Error</p>
+	      <button type="submit" class="btn btn-success btn-sm float-right mt-2">Post</button>      
+	    </div>
+	    <img th:if="${parity != 0}" src="/images/img_avatar3.png" alt="Me" class="ml-3 rounded-circle" style="width:60px;">
+	</div>
+	</form>
+	</div>
+	 
+	<div>
+		<div class="row">
+			<div class="col">
+				<a th:href="@{/team}" class="btn btn-primary m-2 mb-3" role="button">&laquo; Back </a>
+				<button type="button" th:disabled="${!eligible}" class="btn btn-primary float-right m-2 mb-3" data-toggle="modal" data-target="#confirmModal">Vote A+</button>
+			</div>
+		</div>
+	</div>
+		
+	<!-- The Modal -->
+	<div class="modal fade" id="confirmModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<p class="modal-title">Confirm Vote</p>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<span>Are you sure?</span><p><small class="text-muted">Please note you can only vote for 20% of your team</small></p>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer" th:object="${appraisal?.appraisalPk}" th:with="year=*{appraisalCategory?.appraisalYear?.year}, type=*{appraisalCategory?.appraisalType?.type}">
+				<a th:href="@{/team/__${#temporals.year(year)}__/__${type}__/__${employee?.id}__/vote-a-plus}" class="btn btn-primary" role="button">Yes</a>
+				<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>		
+	<!-- <hr class="mb-5">  -->
+	<script>
+		var editor = new Jodit("#editor", {
+		  "readonly": true,
+		  "language": "en"
+		});
+	</script>
+	<!-- style="background-color:#D4F6FE" -->
+</main> <!-- /.container -->
+  </body>
+</html>
+

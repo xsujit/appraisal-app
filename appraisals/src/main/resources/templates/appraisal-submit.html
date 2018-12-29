@@ -1,0 +1,67 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jodit/3.1.95/jodit.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jodit/3.1.95/jodit.min.js"></script>
+	<title> Submit your appraisal</title>
+</head>
+<body>
+<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Appraisal')"></nav>
+
+<main role="main" class="container" layout:fragment="content">
+	
+	<div th:if="${jpaSystemException}" th:text="${#messages.msg('persist.error')}" class="alert alert-danger"></div>
+
+	<div class="jumbotron mb-3 p-4" th:object="${appraisalCategory}" th:with="type=*{appraisalType.description}, year=*{appraisalYear.year}">
+		<h1>Appraisal <small class="text-muted"	th:text="${' Year ' + #temporals.year(year) + ' | ' + type}"></small></h1>
+		<p>Publish your key performance areas | View peer appraisals | Vote for the best appraisals | View results </p>
+	</div>
+	 
+	<div th:object="${employee}">
+		<div class="card bg-light">
+			<div class="card-header">My Details</div>
+			<div class="card-body">
+				<table class="table table-borderless table-sm">
+					<tr>
+						<th scope="row">Name</th>
+						<td class="text-capitalize" th:text="*{firstName + ' ' + lastName}"></td>
+						<th scope="row">Project IO</th>
+						<td th:text="*{project.id}"></td>
+					</tr>
+					<tr>
+						<th scope="row">Employee ID</th>
+						<td th:text="*{id}"></td>
+						<th scope="row">Project Title</th>
+						<td th:text="*{project.title}"></td>							
+					</tr>
+					<tr>
+						<th scope="row">Location</th>
+						<td class="text-capitalize" th:text="*{location}"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	 
+	<div class="mt-3 bg-light border clearfix" th:with="currentUrl=${#httpServletRequest.requestURI}">
+	<h6 class="pl-3 pt-3 pb-2">My Appraisal</h6>
+	<form th:action="@{${currentUrl}}" th:object="${appraisal}" th:method="${currentUrl} == '/appraisal' ? POST : PUT">
+		<div class="form-group">
+			<textarea class="form-control" name="description" th:text="*{description}" id="editor"	placeholder="Describe your key performance areas for this appraisal"></textarea>
+			<p class="text-danger" th:if="${#fields.hasErrors('*{description}')}" th:errors="*{description}">Error</p>
+		</div>				
+		<button type="submit" class="m-2 btn btn-primary float-right">Save Appraisal</button>
+	</form>
+	</div>
+	<script>
+		var editor = new Jodit("#editor", {
+		  "autofocus": true,
+		  "language": "en"
+		});
+	</script>
+	<!-- <hr class="mb-5">  -->
+</main>	
+</body>
+</html>
+
