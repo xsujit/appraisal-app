@@ -32,13 +32,13 @@
 						<th scope="row">Name</th>
 						<td class="text-capitalize" th:text="${#strings.toString(employee)}"></td>
 						<th scope="row">Project IO</th>
-						<td th:text="*{project.id}"></td>
+						<td th:text="*{user.project.id}"></td>
 					</tr>
 					<tr>
 						<th scope="row">Employee ID</th>
 						<td th:text="*{id}"></td>
 						<th scope="row">Project Title</th>
-						<td th:text="*{project.title}"></td>							
+						<td th:text="*{user.project.title}"></td>							
 					</tr>
 					<tr>
 						<th scope="row">Location</th>

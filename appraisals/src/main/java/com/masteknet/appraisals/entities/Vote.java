@@ -14,7 +14,7 @@ public class Vote {
 	@EmbeddedId
     private VoteId id;
 	
-	@Column(name="SUBMIT_DATE", updatable=false)
+	@Column(name="SUBMIT_DATE", updatable=false, nullable=false)
 	private LocalDateTime submitDate;
 	
 	public VoteId getId() {

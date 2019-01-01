@@ -27,13 +27,13 @@
 	      </tr>
 	    </thead>
 	    <tbody id="myTable">
-	      <tr th:each="each, itemStat : ${team}" th:with="category=${each.value.appraisal?.appraisalPk?.appraisalCategory}">
+	      <tr th:each="team, itemStat : ${teamList}" th:with="category=${team.appraisal?.appraisalPk?.appraisalCategory}, employee=${team.employee}, appraisal=${team.appraisal}">
 	      	<td th:text="${itemStat.index+1}"></td>
-	      	<td th:text="${each.key}"></td>
-	        <td th:text="${each.value.employee.firstName}"></td>
-	        <td th:text="${each.value.employee.lastName}"></td>
-	        <td><a th:href="@{/team/__${#temporals.year(category?.appraisalYear?.year)}__/__${category?.appraisalType?.type}__/__${each.key}__}" class="btn btn-info" th:classappend="${each.value.appraisal == null} ? 'disabled'" role="button">View</a></td>
-	        <td><span th:if="${each.value.vote}" class="mx-4 oi oi-check"></span></td>
+	      	<td th:text="${employee.id}"></td>
+	        <td th:text="${employee.firstName}"></td>
+	        <td th:text="${employee.lastName}"></td>
+	        <td><a th:href="@{/team/__${#temporals.year(category?.appraisalYear?.year)}__/__${category?.appraisalType?.type}__/__${employee.id}__}" class="btn btn-info" th:classappend="${appraisal == null OR !appraisal.signedOff} ? 'disabled'" role="button">View</a></td>
+	        <td><span th:if="${team.vote}" class="mx-4 oi oi-check"></span></td>
 	      </tr>
 	    </tbody>
   	</table>

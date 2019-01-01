@@ -33,13 +33,14 @@ public class AppraisalService {
 	public DataAccessException save(Appraisal appraisal, AppraisalCategory appraisalCategory, Employee employee) {
 		
 		appraisal.setAppraisalPk(new AppraisalPk(employee, appraisalCategory));
-		appraisal.setProject(employee.getProject());
+		appraisal.setProject(employee.getUser().getProject());
 		try {
 			appraisalRepository.save(appraisal);
 		} catch (DataAccessException dae) {
 			System.out.println(dae.getMessage());
 			return dae; 
 		}
+		appraisalRepository.save(appraisal);
 		return null;
 	}
 	

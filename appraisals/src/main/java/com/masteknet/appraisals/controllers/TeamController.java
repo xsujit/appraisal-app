@@ -3,7 +3,7 @@ package com.masteknet.appraisals.controllers;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
-import java.util.Map;
+import java.util.ArrayList;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -19,6 +19,7 @@ import com.masteknet.appraisals.entities.Appraisal;
 import com.masteknet.appraisals.entities.AppraisalCategory;
 import com.masteknet.appraisals.entities.Comment;
 import com.masteknet.appraisals.entities.Employee;
+import com.masteknet.appraisals.exceptions.AppraisalNotFoundException;
 import com.masteknet.appraisals.models.Team;
 import com.masteknet.appraisals.services.AppraisalService;
 import com.masteknet.appraisals.services.TeamService;
@@ -41,9 +42,9 @@ public class TeamController extends AppraisalBase {
 		
 	@GetMapping("/team")
 	public String getTeam(Model model) {
-		Map<Long, Team> team = teamService.createTeamMap(getAppraisalCategory(), getLoggedInEmployee());
-		if (team != null) {
-			model.addAttribute("team", team);
+		ArrayList<Team> teamList = teamService.getTeam(getAppraisalCategory(), getLoggedInEmployee());
+		if (teamList != null) {
+			model.addAttribute("teamList", teamList);
 			return "team";
 		}
 		return "redirect:/error";
@@ -54,7 +55,9 @@ public class TeamController extends AppraisalBase {
 		
 		AppraisalCategory appraisalCategory = getAppraisalCategory(Byte.parseByte(typeId), LocalDate.of(Year.parse(yearId).getValue(), Month.JANUARY, 01));
 		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), appraisalCategory);
-		if(appraisal != null) {
+		if(appraisal == null) {
+			throw new AppraisalNotFoundException(yearId+typeId+employeeId);
+		} else {
 			model.addAttribute("employee", getEmployee(Long.parseLong(employeeId)));
 			model.addAttribute("appraisal", appraisal);
 			model.addAttribute("comments", teamService.getComments(appraisal));
@@ -62,7 +65,6 @@ public class TeamController extends AppraisalBase {
 			model.addAttribute("eligible", (teamService.hasVoted(appraisal, getLoggedInEmployee()) || teamService.selfVote(appraisal, getLoggedInEmployee()) ? false : true));
 			return "team-view";
 		}
-		return "redirect:/error";
 	}
 	
 	@GetMapping("/team/{yearId}/{typeId}/{employeeId}/vote-a-plus")
@@ -70,6 +72,9 @@ public class TeamController extends AppraisalBase {
 		
 		AppraisalCategory appraisalCategory = getAppraisalCategory(Byte.parseByte(typeId), LocalDate.of(Year.parse(yearId).getValue(), Month.JANUARY, 01));
 		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), appraisalCategory);
+		if(appraisal == null) {
+			throw new AppraisalNotFoundException(yearId+typeId+employeeId);
+		}
 		if(teamService.selfVote(appraisal, getLoggedInEmployee()) || teamService.hasVoted(appraisal, getLoggedInEmployee())) {
 			redirectAttributes.addFlashAttribute("message", "Already voted or self vote");
 			redirectAttributes.addFlashAttribute("cssClass", "alert-danger");
@@ -78,7 +83,6 @@ public class TeamController extends AppraisalBase {
 			if(dae != null) {
 				redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
 				redirectAttributes.addFlashAttribute("cssClass", "alert-danger");
-				System.out.println("Data Access Exception: " + dae.getMessage());
 			} else {
 				redirectAttributes.addFlashAttribute("message", "Vote registered successfully.");
 				redirectAttributes.addFlashAttribute("cssClass", "alert-success");
@@ -105,7 +109,6 @@ public class TeamController extends AppraisalBase {
 		if(dae != null) {
 			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
 			redirectAttributes.addFlashAttribute("cssClass", "alert-danger");
-			System.out.println("Data Access Exception: " + dae.getMessage());
 		} else {
 			redirectAttributes.addFlashAttribute("message", "Your comment was posted successfully.");
 			redirectAttributes.addFlashAttribute("cssClass", "alert-success");

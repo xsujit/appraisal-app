@@ -1,14 +1,11 @@
 package com.masteknet.appraisals.services;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-
 import com.masteknet.appraisals.entities.Appraisal;
 import com.masteknet.appraisals.entities.AppraisalCategory;
 import com.masteknet.appraisals.entities.Comment;
@@ -35,15 +32,10 @@ public class TeamService {
 		this.commentRepository = commentRepository;
 	}
 	
-	public Map<Long, Team> createTeamMap(AppraisalCategory appraisalCategory, Employee voter) {
-		List<Team> team = new ArrayList<>();
-		team = voteRepository.getTeam(appraisalCategory, voter, voter.getProject());
-		Map<Long, Team> teamMap = new HashMap<>();
-		for(Team t : team) {
-			teamMap.put(t.getEmployee().getId(), t);
-		}
-		 
-		return teamMap;
+	public ArrayList<Team> getTeam(AppraisalCategory appraisalCategory, Employee voter) {
+		List<Team> teamList = new ArrayList<>();
+		teamList = voteRepository.getTeam(appraisalCategory, voter, voter.getUser().getProject());
+		return (ArrayList<Team>) teamList;
 	}
 	
 	public boolean hasVoted(Appraisal appraisal, Employee me) { // check if voted for an appraisal

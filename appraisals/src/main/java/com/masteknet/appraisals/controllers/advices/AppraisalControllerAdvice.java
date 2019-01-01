@@ -16,4 +16,5 @@ public class AppraisalControllerAdvice extends AppraisalBase {
 		model.addAttribute("employee", getLoggedInEmployee());
 		model.addAttribute("appraisalCategory", getAppraisalCategory());
     }
+	
 }

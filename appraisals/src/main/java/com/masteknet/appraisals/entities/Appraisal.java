@@ -23,9 +23,9 @@ public class Appraisal implements Serializable {
 	@EmbeddedId
 	private AppraisalPk appraisalPk;
 	@ManyToOne(fetch = FetchType.LAZY, optional=false)
-	@JoinColumn(name="PROJECT_ID")
+	@JoinColumn(name="PROJECT_ID", nullable=false)
 	private Project project;
-	@Column(name="SUBMIT_DATE", updatable=false)
+	@Column(name="SUBMIT_DATE", updatable=false, nullable=false)
 	private LocalDateTime submitDate;
 	@Column(name="LAST_UPDATE_DATE", insertable=false)
 	private LocalDateTime lastUpdateDate;

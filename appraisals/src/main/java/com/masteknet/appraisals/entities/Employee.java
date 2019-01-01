@@ -6,8 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -36,9 +34,6 @@ public class Employee implements Serializable {
 	private String firstName;
 	@Column(name="LAST_NAME", nullable=false)
 	private String lastName;
-	@ManyToOne(fetch = FetchType.LAZY, optional=false)
-	@JoinColumn(name="PROJECT_ID")
-	private Project project;
 	@Column(name="LOCATION", nullable=false)
 	private String location;
 	
@@ -46,13 +41,12 @@ public class Employee implements Serializable {
 		super();
 	}
 
-	public Employee(long id, User user, String firstName, String lastName, Project project, String location) {
+	public Employee(long id, User user, String firstName, String lastName, String location) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.project = project;
 		this.location = location;
 	}
 
@@ -94,14 +88,6 @@ public class Employee implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public Project getProject() {
-		return project;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
 	}
 
 	public String getLocation() {

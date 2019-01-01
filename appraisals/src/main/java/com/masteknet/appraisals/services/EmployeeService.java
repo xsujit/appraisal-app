@@ -46,7 +46,7 @@ public class EmployeeService {
 	}
 	
 	public Iterable<Employee> getEmployees(Project project) {
-		return employeeRepository.findByProject(project);
+		return employeeRepository.findByUserProject(project);
 	}
 	
 	public Employee getEmployee(long employeeId) {
@@ -55,10 +55,10 @@ public class EmployeeService {
 
 	public void createBasicUser(RegistrationForm registrationForm, Project project) { // try model mapper
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(11);
-		User user = new User(encoder.encode(registrationForm.getPassword()), registrationForm.getUsername());
+		User user = new User(encoder.encode(registrationForm.getPassword()), registrationForm.getUsername(), project);
 		AuthUserGroup userGroup = new AuthUserGroup("USER", user);
 		Employee employee = new Employee(Long.parseLong(registrationForm.getEmployeeId()), user, registrationForm.getFirstName(), 
-				registrationForm.getLastName(), project, registrationForm.getLocation());
+				registrationForm.getLastName(), registrationForm.getLocation());
 		List<AuthUserGroup> userGroups = new ArrayList<>();
 		userGroups.add(userGroup);
 		user.setUsergroups(userGroups);

@@ -47,7 +47,6 @@ public class AppraisalController extends AppraisalBase {
 			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
 			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			redirectAttributes.addFlashAttribute(appraisal); // so that form data is not lost after redirect
-			System.out.println("Data Access Exception in post: " + dae.getMessage());
 		} else {
 			redirectAttributes.addFlashAttribute("message", "Appraisal saved successfully.");
 			redirectAttributes.addFlashAttribute("alertClass", "alert-success");
@@ -82,7 +81,6 @@ public class AppraisalController extends AppraisalBase {
 			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
 			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			redirectAttributes.addFlashAttribute(appraisal); // so that form data is not lost after redirect
-			System.out.println("Data Access Exception in put: " + dae.getMessage());
 			return "redirect:/appraisal/edit";
 		} else {
 			redirectAttributes.addFlashAttribute("message", "Appraisal saved successfully.");
@@ -98,7 +96,6 @@ public class AppraisalController extends AppraisalBase {
 		if(dae != null) {
 			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
 			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-			System.out.println("Data Access Exception in signoff: " + dae.getMessage());
 		} else {
 			redirectAttributes.addFlashAttribute("message", "Appraisal signed off successfully.");
 			redirectAttributes.addFlashAttribute("alertClass", "alert-success");

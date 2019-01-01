@@ -13,6 +13,6 @@ public interface EmployeeRepository extends CrudRepository<Employee, Long> {
 	Employee findByUserId(long userId);
 	@Query(value="SELECT e FROM Employee e WHERE e.id=?1")
 	Employee findById(long employeeId);
-	Iterable<Employee> findByProject(Project project);
+	Iterable<Employee> findByUserProject(Project project);
 	
 }

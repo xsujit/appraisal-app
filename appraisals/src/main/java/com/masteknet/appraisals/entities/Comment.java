@@ -22,7 +22,7 @@ public class Comment {
 	private long id;
 	@Embedded
     private CommentId commentId;
-	@Column(name="SUBMIT_DATE", updatable=false)
+	@Column(name="SUBMIT_DATE", updatable=false, nullable=false)
 	private LocalDateTime submitDate;
 	@NotBlank(message="Comment cannot be blank")
 	@Size(min=2, max=280, message="Comment must be between 2 and 280 characters")
