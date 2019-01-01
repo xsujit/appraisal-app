@@ -10,30 +10,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.masteknet.appraisals.entities.Appraisal;
-import com.masteknet.appraisals.entities.AppraisalCategory;
-import com.masteknet.appraisals.entities.AppraisalPk;
-import com.masteknet.appraisals.entities.Employee;
 import com.masteknet.appraisals.services.AppraisalService;
 
-@SessionAttributes(names={"appraisalCategory", "employee"})
 @Controller
-public class AppraisalController {
+public class AppraisalController extends AppraisalBase {
 	
 	@Autowired
 	private AppraisalService appraisalService;
-
+	
 	@GetMapping("/appraisal")
-	public String getAppraisal(Model model, @ModelAttribute AppraisalCategory appraisalCategory, @ModelAttribute Employee employee) {
-		
+	public String getAppraisal(Model model) {
 		if (model.containsAttribute("appraisal")) {
 			return "appraisal-submit";
 		}
-		Appraisal existingAppraisal = appraisalService.getAppraisal(appraisalCategory, employee);
-		if (existingAppraisal != null) {
-			model.addAttribute("appraisal", existingAppraisal);
+		Appraisal currentAppraisal = appraisalService.getAppraisal(getLoggedInEmployee(), getAppraisalCategory());
+		if (currentAppraisal != null) {
+			model.addAttribute("appraisal", currentAppraisal);
 			return "appraisal-view";
 		} else {
 			Appraisal appraisal = new Appraisal();
@@ -43,16 +37,14 @@ public class AppraisalController {
 	}
 	
 	@PostMapping("/appraisal")
-	public String setAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, RedirectAttributes redirectAttributes, @ModelAttribute AppraisalCategory appraisalCategory, @ModelAttribute Employee employee) {
+	public String setAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, RedirectAttributes redirectAttributes) {
 		
 		if (result.hasErrors()) {
 			return "appraisal-submit";
 		}
-		appraisal.setAppraisalPk(new AppraisalPk(employee, appraisalCategory));
-		appraisal.setProject(employee.getProject());
-		DataAccessException dae = appraisalService.save(appraisal);
+		DataAccessException dae = appraisalService.save(appraisal, getAppraisalCategory(), getLoggedInEmployee());
 		if(dae != null) {
-			redirectAttributes.addFlashAttribute("message", "Unable to persist data. Please contact the system administrator.");
+			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
 			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			redirectAttributes.addFlashAttribute(appraisal); // so that form data is not lost after redirect
 			System.out.println("Data Access Exception in post: " + dae.getMessage());
@@ -64,11 +56,12 @@ public class AppraisalController {
 	}
 	
 	@GetMapping("/appraisal/edit")
-	public String editAppraisal(Model model, @ModelAttribute AppraisalCategory appraisalCategory, @ModelAttribute Employee employee) {
+	public String editAppraisal(Model model) {
+		
 		if (model.containsAttribute("appraisal")) {
 			return "appraisal-submit";
 		}
-		Appraisal existingAppraisal = appraisalService.getAppraisal(appraisalCategory, employee);
+		Appraisal existingAppraisal = appraisalService.getAppraisal(getLoggedInEmployee(), getAppraisalCategory());
 		if(existingAppraisal != null) {
 			if(!existingAppraisal.isSignedOff()) {
 				model.addAttribute("appraisal", existingAppraisal);
@@ -79,15 +72,14 @@ public class AppraisalController {
 	}
 	
 	@PutMapping("/appraisal/edit")
-	public String updateAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, RedirectAttributes redirectAttributes, Model model, @ModelAttribute AppraisalCategory appraisalCategory, @ModelAttribute Employee employee) {
+	public String updateAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
 		
 		if (result.hasErrors()) {
 			return "appraisal-submit";
 		}
-		appraisal.setAppraisalPk(new AppraisalPk(employee, appraisalCategory));
-		DataAccessException dae = appraisalService.update(appraisal);
+		DataAccessException dae = appraisalService.update(appraisal, getAppraisalCategory(), getLoggedInEmployee());
 		if(dae != null) {
-			redirectAttributes.addFlashAttribute("message", "Unable to persist data. Please contact the system administrator.");
+			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
 			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			redirectAttributes.addFlashAttribute(appraisal); // so that form data is not lost after redirect
 			System.out.println("Data Access Exception in put: " + dae.getMessage());
@@ -100,11 +92,11 @@ public class AppraisalController {
 	}
 	
 	@GetMapping("/appraisal/sign-off")
-	public String setAppraisalSignOff(RedirectAttributes redirectAttributes, @ModelAttribute AppraisalCategory appraisalCategory, @ModelAttribute Employee employee) {
+	public String setAppraisalSignOff(RedirectAttributes redirectAttributes) {
 		
-		DataAccessException dae = appraisalService.signOff(appraisalCategory, employee);
+		DataAccessException dae = appraisalService.signOff(getAppraisalCategory(), getLoggedInEmployee());
 		if(dae != null) {
-			redirectAttributes.addFlashAttribute("message", "Unable to persist data. Please contact the system administrator.");
+			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
 			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			System.out.println("Data Access Exception in signoff: " + dae.getMessage());
 		} else {
@@ -113,4 +105,5 @@ public class AppraisalController {
 		}
 		return "redirect:/appraisal";
 	}
+
 }

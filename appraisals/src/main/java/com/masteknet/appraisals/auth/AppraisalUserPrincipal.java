@@ -5,12 +5,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.masteknet.appraisals.entities.AuthUserGroup;
+import com.masteknet.appraisals.entities.Employee;
 import com.masteknet.appraisals.entities.User;
 
 public class AppraisalUserPrincipal implements UserDetails {
@@ -18,11 +17,13 @@ public class AppraisalUserPrincipal implements UserDetails {
 	private static final long serialVersionUID = -2490487613804220734L;
 	private User user;
 	private List<AuthUserGroup> userGroups;
+	private Employee employee; 
 	
-	public AppraisalUserPrincipal(User user, List<AuthUserGroup> userGroups) {
+	public AppraisalUserPrincipal(User user, List<AuthUserGroup> userGroups, Employee employee) {
 		super();
 		this.user = user;
 		this.userGroups = userGroups;
+		this.employee = employee;
 	}
 
 	@Override
@@ -65,6 +66,14 @@ public class AppraisalUserPrincipal implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	public long getProjectId() {
+		return this.employee.getProject().getId();
+	}
+	
+	public long getUserId() {
+		return this.user.getId();
 	}
 	
 }

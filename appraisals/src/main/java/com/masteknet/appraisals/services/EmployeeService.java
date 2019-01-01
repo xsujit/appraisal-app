@@ -3,12 +3,10 @@ package com.masteknet.appraisals.services;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.masteknet.appraisals.auth.IAuthenticationFacade;
 import com.masteknet.appraisals.entities.AuthUserGroup;
 import com.masteknet.appraisals.entities.Employee;
 import com.masteknet.appraisals.entities.Project;
@@ -19,42 +17,16 @@ import com.masteknet.appraisals.repositories.EmployeeRepository;
 @Service
 public class EmployeeService {
 
-	// repositories
 	private EmployeeRepository employeeRepository;
-	
-	// service
-	private UserDetailsServiceImpl userService;
+	private IAuthenticationFacade authenticationFacade;
 	
 	@Autowired
-	public EmployeeService(EmployeeRepository employeeRepository) {
+	public EmployeeService(EmployeeRepository employeeRepository, IAuthenticationFacade authenticationFacade) {
 		super();
 		this.employeeRepository = employeeRepository;
+		this.authenticationFacade = authenticationFacade;
 	}
 
-	public UserDetailsServiceImpl getUserService() {
-		return userService;
-	}
-
-	@Autowired
-	public void setUserService(UserDetailsServiceImpl userService) {
-		this.userService = userService;
-	}
-
-	private User getLoggedInUser() { // private
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			return userService.findByEmail(authentication.getName());	
-		}
-		return null;
-	}
-	
-	public boolean emailExists(String email) { // before authentication
-		if(userService.findByEmail(email) != null) {
-			return true;
-		}
-		return false;
-	}
-	
 	public boolean employeeIdExists(long employeeId) { // before authentication
 		if(getEmployee(employeeId) != null) {
 			return true;
@@ -63,9 +35,8 @@ public class EmployeeService {
 	}
 	
 	public Employee getLoggedInEmployee() {
-		User user = getLoggedInUser();
-		if(user != null) {
-			return employeeRepository.findByUserId(user.getId());	
+		if(authenticationFacade.getPrincipal() != null) {
+			return employeeRepository.findByUserId(authenticationFacade.getPrincipal().getUserId());	
 		}
 		return null;
 	}

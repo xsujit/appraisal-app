@@ -2,7 +2,7 @@ package com.masteknet.appraisals.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import com.masteknet.appraisals.entities.Appraisal;
 import com.masteknet.appraisals.entities.AppraisalCategory;
@@ -21,21 +21,19 @@ public class AppraisalService {
 		this.appraisalRepository = appraisalRepository;
 	}
 	
-	public Appraisal getAppraisal(AppraisalPk appraisalPk) {
+	private Appraisal getAppraisal(AppraisalPk appraisalPk) { // private
 		return appraisalRepository.findByAppraisalPk(appraisalPk);
 	}
-	
-	public Appraisal getAppraisal(AppraisalCategory appraisalCategory, Employee employee) {
+		
+	@PostAuthorize("returnObject == null OR authentication.principal.projectId == returnObject.project.id")
+	public Appraisal getAppraisal(Employee employee, AppraisalCategory appraisalCategory) {
 		return getAppraisal(new AppraisalPk(employee, appraisalCategory));
 	}
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public boolean isAdmin() {
-		return true;
-	}
+
+	public DataAccessException save(Appraisal appraisal, AppraisalCategory appraisalCategory, Employee employee) {
 		
-	public DataAccessException save(Appraisal appraisal) {
-		
+		appraisal.setAppraisalPk(new AppraisalPk(employee, appraisalCategory));
+		appraisal.setProject(employee.getProject());
 		try {
 			appraisalRepository.save(appraisal);
 		} catch (DataAccessException dae) {
@@ -45,17 +43,18 @@ public class AppraisalService {
 		return null;
 	}
 	
-	public DataAccessException update(Appraisal appraisal) {
+	public DataAccessException update(Appraisal appraisal, AppraisalCategory appraisalCategory, Employee employee) {
 
-		Appraisal existingAppraisal = getAppraisal(appraisal.getAppraisalPk());
-		if(existingAppraisal != null) {
-			existingAppraisal.setDescription(appraisal.getDescription());
+		appraisal.setAppraisalPk(new AppraisalPk(employee, appraisalCategory));
+		Appraisal currentAppraisal = getAppraisal(appraisal.getAppraisalPk());
+		if(currentAppraisal != null && !currentAppraisal.isSignedOff()) {
+			currentAppraisal.setDescription(appraisal.getDescription());
 		}
 		try {
-			appraisalRepository.save(existingAppraisal);
+			appraisalRepository.save(currentAppraisal);
 		} catch (DataAccessException dae) {
 			System.out.println(dae.getMessage());
-			return dae; 
+			return dae;
 		}
 		return null;
 	}
@@ -63,18 +62,10 @@ public class AppraisalService {
 	public Iterable<Appraisal> getSignedOffAppraisals() {
 		return appraisalRepository.findBySignedOff(true);
 	}
-	/*
-	public Iterable<Appraisal> getSignedOffActiveAppraisals() {
-		return appraisalRepository.findBySignedOffAndAppraisalPkAppraisalCategory(true, appraisalCategoryService.getAppraisalCategory());
-	}
-	
-	public Iterable<Appraisal> getSignedOffTeamAppraisals(Project project){
-		return appraisalRepository.findBySignedOffAndAppraisalPkAppraisalCategoryAndProject(true, appraisalCategoryService.getAppraisalCategory(), project);
-	}
-	*/
+
 	public DataAccessException signOff(AppraisalCategory appraisalCategory, Employee employee) {
-		Appraisal appraisal = getAppraisal(appraisalCategory, employee);
-		if(appraisal != null) {
+		Appraisal appraisal = getAppraisal(employee, appraisalCategory);
+		if(appraisal != null && !appraisal.isSignedOff()) {
 			appraisal.setSignedOff(true);
 			try {
 				appraisalRepository.save(appraisal);
@@ -85,5 +76,4 @@ public class AppraisalService {
 		}
 		return null;
 	}
-
 }

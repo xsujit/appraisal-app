@@ -1,11 +1,15 @@
 package com.masteknet.appraisals.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 @Embeddable
-public class AppraisalCategory {
+public class AppraisalCategory implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional=false)
 	private AppraisalType appraisalType;

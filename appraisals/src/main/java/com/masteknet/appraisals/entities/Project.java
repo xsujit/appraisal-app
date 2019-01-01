@@ -1,7 +1,5 @@
 package com.masteknet.appraisals.entities;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,9 +9,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="PROJECT")
-public class Project implements Serializable {
+public class Project {
 
-	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="ID")
@@ -40,6 +37,11 @@ public class Project implements Serializable {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	@Override
+	public String toString() {
+		return title;
 	}
 
 }

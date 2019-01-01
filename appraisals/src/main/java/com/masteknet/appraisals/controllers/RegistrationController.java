@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.masteknet.appraisals.models.RegistrationForm;
-import com.masteknet.appraisals.services.EmployeeService;
 import com.masteknet.appraisals.services.ProjectService;
+import com.masteknet.appraisals.services.UserDetailsServiceImpl;
 
 @Controller
-public class RegistrationController {
+public class RegistrationController extends AppraisalBase {
 		
 	@Autowired
-	private EmployeeService employeeService;
+	private ProjectService projectService;
 	@Autowired
-	private ProjectService projectService; 
+	private UserDetailsServiceImpl userService;
 
 	@GetMapping("/register")
     public String getRegistrationForm(Model model) {
@@ -37,7 +37,7 @@ public class RegistrationController {
 		if(employeeService.employeeIdExists(Long.parseLong(registrationForm.getEmployeeId()))) {
 			result.rejectValue("employeeId", "error.registrationForm", "Employee Id already exists.");
 		}
-		if(employeeService.emailExists(registrationForm.getUsername())) {
+		if(userService.emailExists(registrationForm.getUsername())) {
 			result.rejectValue("username", "error.registrationForm", "An account already exists for this email.");
 		}
 		if (result.hasErrors()) {

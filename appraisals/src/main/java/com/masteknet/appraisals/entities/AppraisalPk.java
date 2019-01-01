@@ -19,15 +19,6 @@ public class AppraisalPk implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, optional=false)
 	@JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "ID")
 	private Employee employee;
-	/*
-	@ManyToOne(fetch = FetchType.LAZY, optional=false)
-    @JoinColumn(name = "APPRAISAL_YEAR", referencedColumnName = "YEAR")
-	private AppraisalYear appraisalYear;
-	@ManyToOne(fetch = FetchType.LAZY, optional=false)
-    @JoinColumn(name = "APPRAISAL_TYPE", referencedColumnName = "TYPE")
-	private AppraisalType appraisalType;
-	*/
-	
 	@Embedded
 	@AssociationOverrides(value = {
 			@AssociationOverride(name = "appraisalType", joinColumns =  @JoinColumn(name = "APPRAISAL_TYPE", referencedColumnName = "TYPE")),
@@ -61,40 +52,6 @@ public class AppraisalPk implements Serializable {
 		this.appraisalCategory = appraisalCategory;
 	}
 
-	/*
-	public AppraisalPk(AppraisalYear appraisalYear, AppraisalType appraisalType, Employee employee) {
-		super();
-		this.employee = employee;
-		this.appraisalYear = appraisalYear;
-		this.appraisalType = appraisalType;
-	}
-
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public AppraisalYear getAppraisalYear() {
-		return appraisalYear;
-	}
-
-	public AppraisalType getAppraisalType() {
-		return appraisalType;
-	}
-	 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-        if (!(obj instanceof AppraisalPk)) return false;
-        AppraisalPk that = (AppraisalPk) obj;
-        return Objects.equals(getEmployee(), that.getEmployee()) && Objects.equals(getAppraisalYear(), that.getAppraisalYear())
-        		&& Objects.equals(getAppraisalType(), that.getAppraisalType());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getEmployee(), getAppraisalYear(), getAppraisalType());
-	}
-	*/
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;

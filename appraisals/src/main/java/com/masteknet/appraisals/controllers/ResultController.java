@@ -8,21 +8,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.masteknet.appraisals.models.Result;
-import com.masteknet.appraisals.services.AppraisalCategoryService;
 import com.masteknet.appraisals.services.TeamService;
 
 @Controller
-public class ResultController {
+public class ResultController extends AppraisalBase {
 	
 	@Autowired
 	private TeamService teamService;
-	@Autowired
-	private AppraisalCategoryService appraisalCategoryService;
 
 	@GetMapping("/result")
 	public String getResult(Model model) {
 
-		List<Result> fullYearResults = teamService.getVotesPerEmployee(appraisalCategoryService.getAppraisalCategory());
+		List<Result> fullYearResults = teamService.getVotesPerEmployee(getAppraisalCategory());
 		TreeMap<Long, Long> fullYearResultMap = new TreeMap<>();
 		TreeMap<Long, Long> midYearResultMap = new TreeMap<>();
 		for(Result result : fullYearResults) {
