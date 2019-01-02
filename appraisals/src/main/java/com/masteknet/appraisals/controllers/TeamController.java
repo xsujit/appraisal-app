@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.masteknet.appraisals.entities.Appraisal;
 import com.masteknet.appraisals.entities.AppraisalCategory;
 import com.masteknet.appraisals.entities.Comment;
@@ -47,7 +46,7 @@ public class TeamController extends AppraisalBase {
 			model.addAttribute("teamList", teamList);
 			return "team";
 		}
-		return "redirect:/error";
+		return "redirect:/error?message=Your+team+could+not+be+displayed.+Please+contact+support.";
 	}
 	
 	@GetMapping("/team/{yearId}/{typeId}/{employeeId}")
@@ -68,7 +67,7 @@ public class TeamController extends AppraisalBase {
 	}
 	
 	@GetMapping("/team/{yearId}/{typeId}/{employeeId}/vote-a-plus")
-	public String saveVote(@PathVariable String yearId, @PathVariable String typeId, @PathVariable String employeeId, RedirectAttributes redirectAttributes) {
+	public String saveVote(@PathVariable String yearId, @PathVariable String typeId, @PathVariable String employeeId) {
 		
 		AppraisalCategory appraisalCategory = getAppraisalCategory(Byte.parseByte(typeId), LocalDate.of(Year.parse(yearId).getValue(), Month.JANUARY, 01));
 		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), appraisalCategory);
@@ -76,44 +75,37 @@ public class TeamController extends AppraisalBase {
 			throw new AppraisalNotFoundException(yearId+typeId+employeeId);
 		}
 		if(teamService.selfVote(appraisal, getLoggedInEmployee()) || teamService.hasVoted(appraisal, getLoggedInEmployee())) {
-			redirectAttributes.addFlashAttribute("message", "Already voted or self vote");
-			redirectAttributes.addFlashAttribute("cssClass", "alert-danger");
-		} else {
-			DataAccessException dae = teamService.saveVote(appraisal, getLoggedInEmployee());
-			if(dae != null) {
-				redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
-				redirectAttributes.addFlashAttribute("cssClass", "alert-danger");
-			} else {
-				redirectAttributes.addFlashAttribute("message", "Vote registered successfully.");
-				redirectAttributes.addFlashAttribute("cssClass", "alert-success");
-			}
+			return "redirect:/team/{yearId}/{typeId}/{employeeId}?error=Already+voted+or+self+vote.";
+		} 
+		try {
+			teamService.saveVote(appraisal, getLoggedInEmployee());
+		} catch (DataAccessException dae) {
+			return "redirect:/team/{yearId}/{typeId}/{employeeId}?error=Unable+to+save+your+vote.+Please+contact+support.";
 		}
-		return "redirect:/team/{yearId}/{typeId}/{employeeId}";
+		return "redirect:/team/{yearId}/{typeId}/{employeeId}?success=Vote+registered+successfully.";
 	}
 	
 	@PostMapping("/team/{yearId}/{typeId}/{employeeId}/comment")
-	public String saveComment(@Valid @ModelAttribute Comment comment, BindingResult result, @PathVariable String yearId, @PathVariable String typeId, @PathVariable String employeeId, RedirectAttributes redirectAttributes, Model model) {
+	public String saveComment(@Valid @ModelAttribute Comment comment, BindingResult result, @PathVariable String yearId, @PathVariable String typeId, @PathVariable String employeeId, Model model) {
 		
 		AppraisalCategory appraisalCategory = getAppraisalCategory(Byte.parseByte(typeId), LocalDate.of(Year.parse(yearId).getValue(), Month.JANUARY, 01));
 		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), appraisalCategory);
+		if(appraisal == null) {
+			throw new AppraisalNotFoundException(yearId+typeId+employeeId);
+		}
 		if (result.hasErrors()) {
-			if(appraisal != null) {
 				model.addAttribute("employee", getEmployee(Long.parseLong(employeeId)));
 				model.addAttribute("appraisal", appraisal);
 				model.addAttribute("comments", teamService.getComments(appraisal));
 				model.addAttribute("eligible", teamService.selfVote(appraisal, getLoggedInEmployee()) ? false : true);
-				return "team-view";			
-			}
+				return "team-view";
 		}
-		DataAccessException dae = teamService.saveComment(comment, appraisal, getLoggedInEmployee());
-		if(dae != null) {
-			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
-			redirectAttributes.addFlashAttribute("cssClass", "alert-danger");
-		} else {
-			redirectAttributes.addFlashAttribute("message", "Your comment was posted successfully.");
-			redirectAttributes.addFlashAttribute("cssClass", "alert-success");
+		try {
+			teamService.saveComment(comment, appraisal, getLoggedInEmployee());	
+		} catch (DataAccessException dae) {
+			return "redirect:/team/{yearId}/{typeId}/{employeeId}?error=Your+comment+could+not+be+posted.+Please+contact+support.";
 		}
-		return "redirect:/team/{yearId}/{typeId}/{employeeId}";
+		return "redirect:/team/{yearId}/{typeId}/{employeeId}?success=Your+comment+was+posted+successfully.";
 	}
 	
 }

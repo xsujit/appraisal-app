@@ -11,11 +11,12 @@
 			<div class="container main-content">
 				<ul class="list-group">
 		            <li class="list-group-item list-group-item-danger" th:if="${error}"><h3 th:text="${error}">Status</h3></li>
-		            <li class="list-group-item" th:if="${status}"><strong>Status code: </strong>[[${status}]]</li>
-		            <li class="list-group-item" th:if="${message}"><strong>Message: </strong>[[${message}]]</li>
+		            <li class="list-group-item" th:if="${status}"><strong>Status code: </strong>[[${status}]] [[${error}]]</li>
+		            <li class="list-group-item" th:if="${message} and ${param.message == null}"><strong>Message: </strong>[[${message}]]</li>
 		            <li class="list-group-item" th:if="${timestamp}"><strong>Occurred: </strong>[[${timestamp}]]</li>
 		            <li class="list-group-item" th:if="${exception}"><strong>Exception: </strong>[[${exception}]]</li>
 		            <li class="list-group-item" th:if="${ex}"><strong>Exception: </strong>[[${ex}]]</li>
+		            <li class="list-group-item" th:if="${param.message}"><strong>Error: </strong>[[${param.message[0]}]]</li>
 	        	</ul>
 				<a th:href="@{/}">Back to Home Page</a>
 		   </div>

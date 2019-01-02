@@ -11,12 +11,13 @@
 <nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Team')"></nav>
 <main role="main" class="container" layout:fragment="content">
 
-	<div th:if="${message}" class="alert" th:classappend="${cssClass + ' alert-dismissible fade show'}" role="alert">
-	  <strong th:text="${cssClass == 'alert-success' ? 'Success! ' : 'Error! '}"></strong>[[${message}]]
+	<div th:if="${param.success} or ${param.error}" th:with="check=${param.success != null ? true : false}" 
+		class="alert alert-dismissible fade show" th:classappend="${check} ? 'alert-success' : 'alert-danger'" role="alert">
+	  <strong th:text="${check} ? 'Success! ' : 'Error! '"></strong><span th:text="${check ? param.success[0] : param.error[0]}"></span>
 	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 	    <span aria-hidden="true">&times;</span>
 	  </button>
-	</div>	
+	</div>
 
 	<div class="jumbotron mb-3 p-4" th:object="${appraisalCategory}" th:with="type=*{appraisalType.description}, year=*{appraisalYear.year}">
 		<h1>Appraisal <small class="text-muted"	th:text="${' Year ' + #temporals.year(year) + ' | ' + type}"></small></h1>
@@ -70,7 +71,7 @@
 	<div class="media border my-3 pt-3 px-3 shadow bg-light text-dark rounded" th:with="parity=${#lists.size(comments) % 2}">
 	    <img th:if="${parity == 0}" src="/images/img_avatar3.png" alt="Me" class="mr-3 rounded-circle" style="width:60px;">
 	    <div class="media-body form-group">
-	      <textarea class="form-control" rows="1" th:field="*{message}" placeholder="Post a comment"></textarea>
+	      <textarea class="form-control" rows="1" th:field="*{message}" placeholder="Post a comment" autofocus></textarea>
 	      <p class="text-danger" th:if="${#fields.hasErrors('*{message}')}" th:errors="*{message}">Error</p>
 	      <button type="submit" class="btn btn-success btn-sm float-right mt-2">Post</button>      
 	    </div>

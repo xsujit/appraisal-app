@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import com.masteknet.appraisals.entities.Appraisal;
 import com.masteknet.appraisals.entities.AppraisalCategory;
@@ -64,31 +63,17 @@ public class TeamService {
 		return vote;
 	}
 
-	public DataAccessException saveVote(Appraisal appraisal, Employee me) {
-		if(!hasVoted(appraisal, me)) {
-			if(!selfVote(appraisal, me)) {
-				Vote vote = new Vote();
-				vote.setId(new VoteId(me, appraisal));
-				try {
-					voteRepository.save(vote);
-				} catch (DataAccessException dae) { 
-					return dae; 
-				}	
-			}
-		}
-		return null;
+	public void saveVote(Appraisal appraisal, Employee me) {
+		Vote vote = new Vote();
+		vote.setId(new VoteId(me, appraisal));
+		voteRepository.save(vote);
 	}
 	
-	public DataAccessException saveComment(Comment comment, Appraisal appraisal, Employee commenter) {
+	public void saveComment(Comment comment, Appraisal appraisal, Employee commenter) {
 		
 		CommentId commentId = new CommentId(commenter, appraisal);
 		comment.setCommentId(commentId);
-		try {
-			commentRepository.save(comment);
-		} catch (DataAccessException dae) { 
-			return dae; 
-		}	
-		return null;
+		commentRepository.save(comment);
 	}
 	
 	public List<Comment> getComments(Appraisal appraisal){
