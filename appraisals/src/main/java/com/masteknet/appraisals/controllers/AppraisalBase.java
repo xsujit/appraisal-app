@@ -8,7 +8,7 @@ import com.masteknet.appraisals.services.EmployeeService;
 
 public abstract class AppraisalBase {
 	
-	protected static final String ERROR_MESSAGE = "Unable to persist data. Please contact the system administrator.";
+	protected static final String ERROR_MESSAGE = "Unable to persist data. Please contact support.";
 	
 	@Autowired
 	protected AppraisalCategoryService appraisalCategoryService;

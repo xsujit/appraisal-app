@@ -7,12 +7,18 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.MapsId;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Table(name="EMPLOYEE")
+@NamedEntityGraph(name="graph.Employee.user",
+					attributeNodes = @NamedAttributeNode(value = "user", subgraph = "user"), 
+					subgraphs = @NamedSubgraph(name = "user", attributeNodes = @NamedAttributeNode("project")))
 public class Employee implements Serializable {
 	
 	/**

@@ -10,9 +10,10 @@
 <body>
 <nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Appraisal')"></nav>
 <main role="main" class="container" layout:fragment="content">
- 
-	<div th:if="${message}" class="alert" th:classappend="${alertClass + ' alert-dismissible fade show'}" role="alert">
-	  <strong th:text="${alertClass == 'alert-success' ? 'Success! ' : 'Error! '}"></strong>[[${message}]]
+
+	<div th:if="${param.success} or ${param.error}" th:with="check=${param.success != null ? true : false}" 
+		class="alert alert-dismissible fade show" th:classappend="${check} ? 'alert-success' : 'alert-danger'" role="alert">
+	  <strong th:text="${check} ? 'Success! ' : 'Error! '"></strong><span th:text="${check ? param.success[0] : param.error[0]}"></span>
 	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 	    <span aria-hidden="true">&times;</span>
 	  </button>

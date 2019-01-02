@@ -1,7 +1,6 @@
 package com.masteknet.appraisals.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import com.masteknet.appraisals.entities.Appraisal;
@@ -30,51 +29,28 @@ public class AppraisalService {
 		return getAppraisal(new AppraisalPk(employee, appraisalCategory));
 	}
 
-	public DataAccessException save(Appraisal appraisal, AppraisalCategory appraisalCategory, Employee employee) {
+	public void save(Appraisal appraisal, AppraisalCategory appraisalCategory, Employee employee) {
 		
-		appraisal.setAppraisalPk(new AppraisalPk(employee, appraisalCategory));
-		appraisal.setProject(employee.getUser().getProject());
-		try {
-			appraisalRepository.save(appraisal);
-		} catch (DataAccessException dae) {
-			System.out.println(dae.getMessage());
-			return dae; 
-		}
-		appraisalRepository.save(appraisal);
-		return null;
-	}
-	
-	public DataAccessException update(Appraisal appraisal, AppraisalCategory appraisalCategory, Employee employee) {
-
 		appraisal.setAppraisalPk(new AppraisalPk(employee, appraisalCategory));
 		Appraisal currentAppraisal = getAppraisal(appraisal.getAppraisalPk());
-		if(currentAppraisal != null && !currentAppraisal.isSignedOff()) {
+		if(currentAppraisal != null && !currentAppraisal.isSignedOff()) { // appraisal edit flow
 			currentAppraisal.setDescription(appraisal.getDescription());
-		}
-		try {
 			appraisalRepository.save(currentAppraisal);
-		} catch (DataAccessException dae) {
-			System.out.println(dae.getMessage());
-			return dae;
+		} else { // new appraisal flow
+			appraisal.setProject(employee.getUser().getProject());
+			appraisalRepository.save(appraisal);
 		}
-		return null;
 	}
-		
+	
 	public Iterable<Appraisal> getSignedOffAppraisals() {
 		return appraisalRepository.findBySignedOff(true);
 	}
 
-	public DataAccessException signOff(AppraisalCategory appraisalCategory, Employee employee) {
+	public void signOff(AppraisalCategory appraisalCategory, Employee employee) {
 		Appraisal appraisal = getAppraisal(employee, appraisalCategory);
 		if(appraisal != null && !appraisal.isSignedOff()) {
 			appraisal.setSignedOff(true);
-			try {
-				appraisalRepository.save(appraisal);
-			} catch (DataAccessException dae) {
-				System.out.println(dae.getMessage());
-				return dae; 
-			}	
+			appraisalRepository.save(appraisal);
 		}
-		return null;
 	}
 }

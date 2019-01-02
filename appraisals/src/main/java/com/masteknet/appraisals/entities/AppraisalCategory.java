@@ -41,5 +41,10 @@ public class AppraisalCategory implements Serializable {
 	public void setAppraisalYear(AppraisalYear appraisalYear) {
 		this.appraisalYear = appraisalYear;
 	}
+
+	@Override
+	public String toString() {
+		return appraisalYear.getYear().toString() + appraisalType.getType();
+	}
 	
 }

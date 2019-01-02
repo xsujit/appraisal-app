@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.masteknet.appraisals.entities.Appraisal;
+import com.masteknet.appraisals.exceptions.AppraisalNotFoundException;
 import com.masteknet.appraisals.services.AppraisalService;
 
 @Controller
@@ -22,9 +23,7 @@ public class AppraisalController extends AppraisalBase {
 	
 	@GetMapping("/appraisal")
 	public String getAppraisal(Model model) {
-		if (model.containsAttribute("appraisal")) {
-			return "appraisal-submit";
-		}
+
 		Appraisal currentAppraisal = appraisalService.getAppraisal(getLoggedInEmployee(), getAppraisalCategory());
 		if (currentAppraisal != null) {
 			model.addAttribute("appraisal", currentAppraisal);
@@ -38,36 +37,32 @@ public class AppraisalController extends AppraisalBase {
 	
 	@PostMapping("/appraisal")
 	public String setAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, RedirectAttributes redirectAttributes) {
-		
 		if (result.hasErrors()) {
 			return "appraisal-submit";
 		}
-		DataAccessException dae = appraisalService.save(appraisal, getAppraisalCategory(), getLoggedInEmployee());
-		if(dae != null) {
-			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
-			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-			redirectAttributes.addFlashAttribute(appraisal); // so that form data is not lost after redirect
-		} else {
-			redirectAttributes.addFlashAttribute("message", "Appraisal saved successfully.");
-			redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		try {
+			appraisalService.save(appraisal, getAppraisalCategory(), getLoggedInEmployee());
+		} catch (DataAccessException dae) {
+			result.rejectValue("description", "error.appraisal", ERROR_MESSAGE);
+			return "appraisal-submit";
 		}
-		return "redirect:/appraisal";
+		return "redirect:/appraisal?success=Appraisal+submitted+successfully";
 	}
 	
 	@GetMapping("/appraisal/edit")
 	public String editAppraisal(Model model) {
 		
-		if (model.containsAttribute("appraisal")) {
-			return "appraisal-submit";
-		}
-		Appraisal existingAppraisal = appraisalService.getAppraisal(getLoggedInEmployee(), getAppraisalCategory());
-		if(existingAppraisal != null) {
-			if(!existingAppraisal.isSignedOff()) {
-				model.addAttribute("appraisal", existingAppraisal);
-				return "appraisal-submit";	
+		Appraisal currentAppraisal = appraisalService.getAppraisal(getLoggedInEmployee(), getAppraisalCategory());
+		if(currentAppraisal == null) {
+			throw new AppraisalNotFoundException(getAppraisalCategory().toString()+getLoggedInEmployee().getId());
+		} else {
+			if(currentAppraisal.isSignedOff()) {
+				return "redirect:/appraisal?error=Appraisal+already+signed+off.";	
+			} else {
+				model.addAttribute("appraisal", currentAppraisal);
+				return "appraisal-submit";
 			}
 		}
-		return "redirect:/error";
 	}
 	
 	@PutMapping("/appraisal/edit")
@@ -76,31 +71,24 @@ public class AppraisalController extends AppraisalBase {
 		if (result.hasErrors()) {
 			return "appraisal-submit";
 		}
-		DataAccessException dae = appraisalService.update(appraisal, getAppraisalCategory(), getLoggedInEmployee());
-		if(dae != null) {
-			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
-			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-			redirectAttributes.addFlashAttribute(appraisal); // so that form data is not lost after redirect
-			return "redirect:/appraisal/edit";
-		} else {
-			redirectAttributes.addFlashAttribute("message", "Appraisal saved successfully.");
-			redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		try {
+			appraisalService.save(appraisal, getAppraisalCategory(), getLoggedInEmployee());
+		} catch (DataAccessException dae) {
+			result.rejectValue("description", "error.appraisal", ERROR_MESSAGE);
+			return "appraisal-submit";
 		}
-		return "redirect:/appraisal";
+		return "redirect:/appraisal?success=Appraisal+updated+successfully";
 	}
 	
 	@GetMapping("/appraisal/sign-off")
 	public String setAppraisalSignOff(RedirectAttributes redirectAttributes) {
 		
-		DataAccessException dae = appraisalService.signOff(getAppraisalCategory(), getLoggedInEmployee());
-		if(dae != null) {
-			redirectAttributes.addFlashAttribute("message", ERROR_MESSAGE);
-			redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-		} else {
-			redirectAttributes.addFlashAttribute("message", "Appraisal signed off successfully.");
-			redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		try {
+			appraisalService.signOff(getAppraisalCategory(), getLoggedInEmployee());
+		} catch (DataAccessException dae) {
+			return "redirect:/appraisal?error=Unable+to+persist+data.+Please+contact+support.";
 		}
-		return "redirect:/appraisal";
+		return "redirect:/appraisal?success=Appraisal+signedoff+successfully";
 	}
 
 }
