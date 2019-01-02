@@ -33,14 +33,16 @@ public class RegistrationController extends AppraisalBase {
 	@PostMapping("/register")
 	public String registerUser(@Valid @ModelAttribute RegistrationForm registrationForm, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 		
-		model.addAttribute("projects", projectService.createProjectMap());
+		model.addAttribute("projects", projectService.createProjectMap()); // so that drop-down values are still available in case of an error
+		if (result.hasErrors()) {
+			return "register";
+		}
 		if(employeeService.employeeIdExists(Long.parseLong(registrationForm.getEmployeeId()))) {
 			result.rejectValue("employeeId", "error.registrationForm", "Employee Id already exists.");
+			return "register";
 		}
 		if(userService.emailExists(registrationForm.getUsername())) {
 			result.rejectValue("username", "error.registrationForm", "An account already exists for this email.");
-		}
-		if (result.hasErrors()) {
 			return "register";
 		}
 		employeeService.createBasicUser(registrationForm, projectService.getProject(registrationForm.getProjectId()));

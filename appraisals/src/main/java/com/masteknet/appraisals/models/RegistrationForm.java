@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 public class RegistrationForm {
 	
 	private long userId;
+	@NotBlank(message="Employee Id is required")
 	@Pattern(regexp = "^[1-9]\\d*$", message="Employee Id must be greater than zero")
 	private String employeeId;
 	@Email(message="Email should be well formed")

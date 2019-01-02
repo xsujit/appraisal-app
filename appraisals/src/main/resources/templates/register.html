@@ -10,9 +10,6 @@
 	<main role="main" class="container" layout:fragment="content">
 		
     	<form class="form-signin" th:action="@{/register}" method="post" th:object="${registrationForm}">
-	     	<div th:if="${param.error}">
-	        	<div class="alert alert-danger">Invalid username or password.</div>
-			</div>
 			<h3 class="h3 mb-3 font-weight-normal">Please complete the form to register</h3>
 			<div class="row">
 				<div class="col">
