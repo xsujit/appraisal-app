@@ -35,7 +35,7 @@ public class User implements Serializable {
 	@JoinColumn(name="PROJECT_ID")
 	private Project project;
 	@Column(name="ENABLED", nullable=false)
-	private boolean enabled;
+	private boolean enabled = true;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<AuthUserGroup> usergroups = new ArrayList<>();
 	
