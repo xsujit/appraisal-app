@@ -12,7 +12,7 @@ import com.masteknet.appraisals.repositories.AppraisalRepository;
 @Service
 public class AppraisalService {
 	
-	private AppraisalRepository appraisalRepository;
+	private final AppraisalRepository appraisalRepository;
 
 	@Autowired
 	public AppraisalService(AppraisalRepository appraisalRepository) {

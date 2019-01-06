@@ -12,8 +12,8 @@ import com.masteknet.appraisals.repositories.AppraisalYearRepository;
 @Service
 public class AppraisalCategoryService {
 	
-	private AppraisalYearRepository appraisalYearRepository;
-	private AppraisalTypeRepository appraisalTypeRepository;
+	private final AppraisalYearRepository appraisalYearRepository;
+	private final AppraisalTypeRepository appraisalTypeRepository;
 	
 	@Autowired
 	public AppraisalCategoryService(AppraisalYearRepository appraisalYearRepository,

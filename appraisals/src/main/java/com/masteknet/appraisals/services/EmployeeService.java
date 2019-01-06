@@ -17,7 +17,7 @@ import com.masteknet.appraisals.repositories.EmployeeRepository;
 @Service
 public class EmployeeService {
 
-	private EmployeeRepository employeeRepository;
+	private final EmployeeRepository employeeRepository;
 	private IAuthenticationFacade authenticationFacade;
 	
 	@Autowired

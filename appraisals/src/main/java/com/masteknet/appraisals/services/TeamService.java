@@ -21,8 +21,8 @@ import com.masteknet.appraisals.repositories.VoteRepository;
 public class TeamService {
 
 	// repositories
-	private VoteRepository voteRepository;
-	private CommentRepository commentRepository;
+	private final VoteRepository voteRepository;
+	private final CommentRepository commentRepository;
 	
 	@Autowired
 	public TeamService(VoteRepository voteRepository, CommentRepository commentRepository) {

@@ -10,7 +10,7 @@ import com.masteknet.appraisals.repositories.ProjectRepository;
 @Service
 public class ProjectService {
 	
-	private ProjectRepository projectRepository;
+	private final ProjectRepository projectRepository;
 	
 	@Autowired
 	public ProjectService(ProjectRepository projectRepository) {

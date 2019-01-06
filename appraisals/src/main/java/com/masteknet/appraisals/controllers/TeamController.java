@@ -1,8 +1,5 @@
 package com.masteknet.appraisals.controllers;
 
-import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
 import java.util.ArrayList;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.masteknet.appraisals.entities.Appraisal;
-import com.masteknet.appraisals.entities.AppraisalCategory;
 import com.masteknet.appraisals.entities.Comment;
 import com.masteknet.appraisals.entities.Employee;
 import com.masteknet.appraisals.exceptions.AppraisalNotFoundException;
@@ -31,10 +27,6 @@ public class TeamController extends AppraisalBase {
 	@Autowired
 	private AppraisalService appraisalService;
 	
-	private AppraisalCategory getAppraisalCategory(byte type, LocalDate year) { // private
-		return appraisalCategoryService.getAppraisalCategory(type, year);
-	}
-	
 	private Employee getEmployee(long id) { // private
 		return employeeService.getEmployee(id);
 	}
@@ -49,13 +41,12 @@ public class TeamController extends AppraisalBase {
 		return "redirect:/error?message=Your+team+could+not+be+displayed.+Please+contact+support.";
 	}
 	
-	@GetMapping("/team/{yearId}/{typeId}/{employeeId}")
-	public String getAppraisalByEmployee(Model model, @PathVariable String yearId, @PathVariable String typeId, @PathVariable String employeeId) {
+	@GetMapping("/team/{employeeId}")
+	public String getAppraisalByEmployee(Model model, @PathVariable String employeeId) {
 		
-		AppraisalCategory appraisalCategory = getAppraisalCategory(Byte.parseByte(typeId), LocalDate.of(Year.parse(yearId).getValue(), Month.JANUARY, 01));
-		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), appraisalCategory);
+		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), getAppraisalCategory());
 		if(appraisal == null) {
-			throw new AppraisalNotFoundException(yearId+typeId+employeeId);
+			throw new AppraisalNotFoundException(employeeId);
 		} else {
 			model.addAttribute("employee", getEmployee(Long.parseLong(employeeId)));
 			model.addAttribute("appraisal", appraisal);
@@ -66,32 +57,30 @@ public class TeamController extends AppraisalBase {
 		}
 	}
 	
-	@GetMapping("/team/{yearId}/{typeId}/{employeeId}/vote-a-plus")
-	public String saveVote(@PathVariable String yearId, @PathVariable String typeId, @PathVariable String employeeId) {
+	@GetMapping("/team/{employeeId}/vote-a-plus")
+	public String saveVote(@PathVariable String employeeId) {
 		
-		AppraisalCategory appraisalCategory = getAppraisalCategory(Byte.parseByte(typeId), LocalDate.of(Year.parse(yearId).getValue(), Month.JANUARY, 01));
-		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), appraisalCategory);
+		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), getAppraisalCategory());
 		if(appraisal == null) {
-			throw new AppraisalNotFoundException(yearId+typeId+employeeId);
+			throw new AppraisalNotFoundException(employeeId);
 		}
 		if(teamService.selfVote(appraisal, getLoggedInEmployee()) || teamService.hasVoted(appraisal, getLoggedInEmployee())) {
-			return "redirect:/team/{yearId}/{typeId}/{employeeId}?error=Already+voted+or+self+vote.";
+			return "redirect:/team/{employeeId}?error=Already+voted+or+self+vote.";
 		} 
 		try {
 			teamService.saveVote(appraisal, getLoggedInEmployee());
 		} catch (DataAccessException dae) {
-			return "redirect:/team/{yearId}/{typeId}/{employeeId}?error=Unable+to+save+your+vote.+Please+contact+support.";
+			return "redirect:/team/{employeeId}?error=Unable+to+save+your+vote.+Please+contact+support.";
 		}
-		return "redirect:/team/{yearId}/{typeId}/{employeeId}?success=Vote+registered+successfully.";
+		return "redirect:/team/{employeeId}?success=Vote+registered+successfully.";
 	}
 	
-	@PostMapping("/team/{yearId}/{typeId}/{employeeId}/comment")
-	public String saveComment(@Valid @ModelAttribute Comment comment, BindingResult result, @PathVariable String yearId, @PathVariable String typeId, @PathVariable String employeeId, Model model) {
+	@PostMapping("/team/{employeeId}/comment")
+	public String saveComment(@Valid @ModelAttribute Comment comment, BindingResult result, @PathVariable String employeeId, Model model) {
 		
-		AppraisalCategory appraisalCategory = getAppraisalCategory(Byte.parseByte(typeId), LocalDate.of(Year.parse(yearId).getValue(), Month.JANUARY, 01));
-		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), appraisalCategory);
+		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), getAppraisalCategory());
 		if(appraisal == null) {
-			throw new AppraisalNotFoundException(yearId+typeId+employeeId);
+			throw new AppraisalNotFoundException(employeeId);
 		}
 		if (result.hasErrors()) {
 				model.addAttribute("employee", getEmployee(Long.parseLong(employeeId)));
@@ -103,9 +92,9 @@ public class TeamController extends AppraisalBase {
 		try {
 			teamService.saveComment(comment, appraisal, getLoggedInEmployee());	
 		} catch (DataAccessException dae) {
-			return "redirect:/team/{yearId}/{typeId}/{employeeId}?error=Your+comment+could+not+be+posted.+Please+contact+support.";
+			return "redirect:/team/{employeeId}?error=Your+comment+could+not+be+posted.+Please+contact+support.";
 		}
-		return "redirect:/team/{yearId}/{typeId}/{employeeId}?success=Your+comment+was+posted+successfully.";
+		return "redirect:/team/{employeeId}?success=Your+comment+was+posted+successfully.";
 	}
 	
 }
