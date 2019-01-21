@@ -1,0 +1,99 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
+<head>
+    <title>View your appraisal</title>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+
+<script th:inline="javascript">
+
+$(function () {
+	
+	var drilldownObj = JSON.parse('[(${drillDown})]');
+	var drilldownSeries = [];
+	
+	$.each(drilldownObj, function (key, value) {
+		var dataArray = [];
+		for (voter in value["data"]) {
+			var eachVoter = [];
+			eachVoter.push(voter.toString());
+			eachVoter.push(value["data"][voter]);
+			dataArray.push(eachVoter);
+		}
+		drilldownSeries.push({
+			name: value["id"],
+			id: value["id"],
+			data: dataArray
+		});
+     });
+
+	var myChart = Highcharts.chart('votesChart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Vote distribution January, 2018'
+        },
+        subtitle: {
+            text: 'Click the columns to view voters'
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+        	allowDecimals: false,
+            title: {
+                text: 'Total votes received'
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.y}'
+                }
+            }
+        },
+
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> of total<br/>'
+        },
+
+        "series": [
+            {
+                "name": "Employees",
+                "colorByPoint": true,
+                "data": 
+                	[(${seriesData})]
+                
+            }
+        ],
+        "drilldown": {
+            "series": drilldownSeries
+        }
+    });
+});
+
+</script>
+</head>
+<body>
+<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Result')"></nav>
+	<main role="main" class="container" layout:fragment="content">
+	
+		<div id="votesChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+		<div class="m-3 font-italic">
+			<a th:href="@{/result/full-year}" class="alert-link">Click here</a> to view combined mid-year and full-year results.
+		</div>
+	</main> <!-- /.container -->
+</body>
+</html>
+
