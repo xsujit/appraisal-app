@@ -15,6 +15,7 @@ import com.masteknet.appraisal.entities.CommentId;
 import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.entities.Vote;
 import com.masteknet.appraisal.entities.VoteId;
+import com.masteknet.appraisal.highcharts.AppraisalVoters;
 import com.masteknet.appraisal.repositories.CommentRepository;
 import com.masteknet.appraisal.repositories.VoteRepository;
 
@@ -57,6 +58,10 @@ public class TeamService {
 	
 	public List<Result> getVotesPerEmployee(AppraisalCategory category) {
 		return voteRepository.countVotesPerEmployee(category);
+	}
+	
+	public List<AppraisalVoters> getAppraisalAndVoters(AppraisalCategory category) {
+		return voteRepository.getAppraisalAndVoters(category);
 	}
 
 	public List<Vote> getVotes(Employee voter, AppraisalCategory category) {

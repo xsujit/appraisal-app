@@ -14,6 +14,7 @@ import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.entities.Project;
 import com.masteknet.appraisal.entities.Vote;
 import com.masteknet.appraisal.entities.VoteId;
+import com.masteknet.appraisal.highcharts.AppraisalVoters;
 
 @Repository
 public interface VoteRepository extends CrudRepository<Vote, VoteId>{
@@ -30,6 +31,13 @@ public interface VoteRepository extends CrudRepository<Vote, VoteId>{
 			+ "WHERE a.appraisalPk.appraisalCategory = ?1 "
 			+ "GROUP BY a.appraisalPk ")
 	List<Result> countVotesPerEmployee(AppraisalCategory category);	
+	
+	@Query(value = "SELECT new com.masteknet.appraisal.highcharts.AppraisalVoters (a.appraisalPk, v.id.voter) "
+			+ "FROM Appraisal a "
+			+ "INNER JOIN Vote v ON a.appraisalPk = v.id.appraisal.appraisalPk "
+			+ "WHERE a.appraisalPk.appraisalCategory = ?1 "
+			+ "ORDER BY v.id.voter ")
+	List<AppraisalVoters> getAppraisalAndVoters(AppraisalCategory category);
 	
 	@Query(value = "SELECT new com.masteknet.appraisal.domain.models.Team (e, a, v) "
 			+ "FROM Employee e "

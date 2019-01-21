@@ -33,5 +33,4 @@ public class Result {
 	public void setVotes(long votes) {
 		this.votes = votes;
 	}
-
 }
