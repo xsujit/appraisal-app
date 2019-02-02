@@ -37,7 +37,7 @@ public class AppraisalController extends AppraisalBase {
 	}
 	
 	@PostMapping("/appraisal")
-	public String setAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, RedirectAttributes redirectAttributes) {
+	public String setAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result) {
 		if (result.hasErrors()) {
 			return "appraisal-submit";
 		}
@@ -67,7 +67,7 @@ public class AppraisalController extends AppraisalBase {
 	}
 	
 	@PutMapping("/appraisal/edit")
-	public String updateAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+	public String updateAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result) {
 		
 		if (result.hasErrors()) {
 			return "appraisal-submit";

@@ -49,8 +49,24 @@ public class EmployeeService {
 		return employeeRepository.findByUserProject(project);
 	}
 	
+	public Iterable<Employee> getPendingEmployees(Project project) {
+		return employeeRepository.findByUserProjectAndUserEnabled(project, false);
+	}
+	
+	public Iterable<Employee> getApprovedEmployees(Project project) {
+		return employeeRepository.findByUserProjectAndUserEnabled(project, true);
+	}
+	
 	public Employee getEmployee(long employeeId) {
 		return employeeRepository.findById(employeeId);
+	}
+	
+	public void save(Employee employee) {
+		employeeRepository.save(employee);
+	}
+	
+	public void saveAll(List<Employee> employees) {
+		employeeRepository.saveAll(employees);
 	}
 
 	public void createBasicUser(RegistrationForm registrationForm, Project project) { // try model mapper
@@ -62,7 +78,7 @@ public class EmployeeService {
 		List<AuthUserGroup> userGroups = new ArrayList<>();
 		userGroups.add(userGroup);
 		user.setUsergroups(userGroups);
-		employeeRepository.save(employee);
+		save(employee);
 	}
 	
 }

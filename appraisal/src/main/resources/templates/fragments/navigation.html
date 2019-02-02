@@ -18,9 +18,10 @@
 			<li th:class="${#strings.equals(activeLink, 'Appraisal')} ? 'nav-item active' : 'nav-item'"><a class="nav-link" href="/appraisal">Appraisal</a></li>
 			<li th:class="${#strings.equals(activeLink, 'Team')} ? 'nav-item active' : 'nav-item'"><a class="nav-link" href="/team">Team</a></li>
 			<li th:class="${#strings.equals(activeLink, 'Result')} ? 'nav-item active' : 'nav-item'"><a class="nav-link" href="/result">Result</a></li>
+			<li th:class="${#strings.equals(activeLink, 'Admin')} ? 'nav-item active' : 'nav-item'" sec:authorize="hasRole('FACILITATOR')"><a class="nav-link" href="/admin">Admin</a></li>
 			<li th:class="${#strings.equals(activeLink, 'Register')} ? 'nav-item active' : 'nav-item'" sec:authorize="isAnonymous()"><a class="nav-link" href="/register">Register</a></li>
-			<li th:class="${#strings.equals(activeLink, 'Login')} ? 'nav-item active' : 'nav-item'" sec:authorize="isAnonymous()"><a class="nav-link" th:href="@{/login}">Login <span class="sr-only">(current)</span></a></li>
-			<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/logout}">Logout <span	class="sr-only">(current)</span></a></li>
+			<li th:class="${#strings.equals(activeLink, 'Login')} ? 'nav-item active' : 'nav-item'" sec:authorize="isAnonymous()"><a class="nav-link" th:href="@{/login}">Login</a></li>
+			<li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
 		</ul>
 	</div>
 </nav>

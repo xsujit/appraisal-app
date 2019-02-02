@@ -16,5 +16,6 @@ public interface EmployeeRepository extends CrudRepository<Employee, Long> {
 	@Query(value="SELECT e FROM Employee e WHERE e.id=?1")
 	Employee findById(long employeeId);
 	Iterable<Employee> findByUserProject(Project project);
+	Iterable<Employee> findByUserProjectAndUserEnabled(Project project, boolean status);
 	
 }
