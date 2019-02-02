@@ -34,7 +34,4 @@ public class SeriesData {
 	public void setDrilldown(long drilldown) {
 		this.drilldown = drilldown;
 	}
-	
-	
-
 }

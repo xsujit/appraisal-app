@@ -3,15 +3,15 @@ package com.masteknet.appraisal.highcharts;
 import com.masteknet.appraisal.entities.AppraisalPk;
 import com.masteknet.appraisal.entities.Employee;
 
-public class AppraisalVoters {
+public class VotedAppraisal {
 	
 	private AppraisalPk appraisalPk;
 	private Employee voter;
 	
-	public AppraisalVoters() {
+	public VotedAppraisal() {
 		super();
 	}
-	public AppraisalVoters(AppraisalPk appraisalPk, Employee voter) {
+	public VotedAppraisal(AppraisalPk appraisalPk, Employee voter) {
 		super();
 		this.appraisalPk = appraisalPk;
 		this.voter = voter;

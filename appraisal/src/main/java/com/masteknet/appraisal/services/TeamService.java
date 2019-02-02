@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masteknet.appraisal.domain.models.Result;
 import com.masteknet.appraisal.domain.models.Team;
 import com.masteknet.appraisal.entities.Appraisal;
 import com.masteknet.appraisal.entities.AppraisalCategory;
@@ -15,7 +14,8 @@ import com.masteknet.appraisal.entities.CommentId;
 import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.entities.Vote;
 import com.masteknet.appraisal.entities.VoteId;
-import com.masteknet.appraisal.highcharts.AppraisalVoters;
+import com.masteknet.appraisal.highcharts.VotedAppraisal;
+import com.masteknet.appraisal.highcharts.VotesPerAppraisal;
 import com.masteknet.appraisal.repositories.CommentRepository;
 import com.masteknet.appraisal.repositories.VoteRepository;
 
@@ -56,12 +56,12 @@ public class TeamService {
 		return (me.equals(appraisal.getAppraisalPk().getEmployee())) ? true : false;
 	}
 	
-	public List<Result> getVotesPerEmployee(AppraisalCategory category) {
-		return voteRepository.countVotesPerEmployee(category);
+	public List<VotesPerAppraisal> getVotesPerAppraisal(AppraisalCategory category) {
+		return voteRepository.getVotesPerAppraisal(category);
 	}
 	
-	public List<AppraisalVoters> getAppraisalAndVoters(AppraisalCategory category) {
-		return voteRepository.getAppraisalAndVoters(category);
+	public List<VotedAppraisal> getVotedAppraisals(AppraisalCategory category) {
+		return voteRepository.getVotedAppraisals(category);
 	}
 
 	public List<Vote> getVotes(Employee voter, AppraisalCategory category) {

@@ -1,18 +1,17 @@
-package com.masteknet.appraisal.domain.models;
+package com.masteknet.appraisal.highcharts;
 
 import com.masteknet.appraisal.entities.AppraisalPk;
 
-
-public class Result {
+public class VotesPerAppraisal {
 
 	private AppraisalPk appraisalPk;
 	private long votes;
 
-	public Result() {
+	public VotesPerAppraisal() {
 		super();
 	}
 
-	public Result(AppraisalPk appraisalPk, long votes) {
+	public VotesPerAppraisal(AppraisalPk appraisalPk, long votes) {
 		super();
 		this.appraisalPk = appraisalPk;
 		this.votes = votes;

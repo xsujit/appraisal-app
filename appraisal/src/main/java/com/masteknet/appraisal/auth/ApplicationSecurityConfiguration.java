@@ -17,6 +17,8 @@ import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 import com.masteknet.appraisal.services.UserDetailsServiceImpl;
 
+import nz.net.ultraq.thymeleaf.LayoutDialect;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true)
@@ -70,5 +72,10 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 	@Bean
 	public SpringSecurityDialect springSecurityDialect() {
 	    return new SpringSecurityDialect();
+	}
+	
+	@Bean
+	public LayoutDialect layoutDialect() {
+	    return new LayoutDialect();
 	}
 }
