@@ -15,7 +15,7 @@ import com.masteknet.appraisal.entities.Project;
 @Controller
 public class AdminController extends AppraisalBase {
 
-	@GetMapping("/admin")
+	@GetMapping("/admin/user")
 	@Secured("ROLE_FACILITATOR")
 	public String getUsersInProject(Model model) {
 		
@@ -25,10 +25,10 @@ public class AdminController extends AppraisalBase {
 		employeeIter.forEach(pendingEmployeeWrapper.getEmployees()::add);
 		model.addAttribute("pendingEmployeeWrapper", pendingEmployeeWrapper);
 		model.addAttribute("approvedEmployees", employeeService.getApprovedEmployees(project));
-		return "admin";
+		return "admin-user";
 	}
 	
-	@PostMapping("/admin")
+	@PostMapping("/admin/user")
 	@Secured("ROLE_FACILITATOR")
 	public String approveUsers(@ModelAttribute("pendingEmployeeWrapper") EmployeeWrapper pendingEmployeeWrapper) {
 
@@ -41,7 +41,12 @@ public class AdminController extends AppraisalBase {
 			}
 		}
 		employeeService.saveAll(employees);
-		return "redirect:/admin?success=Employee+approved+successfully";
+		return "redirect:/admin/user?success=Employee+approved+successfully";
+	}
+	
+	@GetMapping("/admin")
+	public String getAdminHome() {
+		return "admin";
 	}
 	
 }
