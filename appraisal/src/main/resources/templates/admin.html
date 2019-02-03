@@ -43,7 +43,7 @@
 				        <td th:text="${employee.firstName}"></td>
 				        <td th:text="${employee.lastName}"></td>
 				        <td th:text="${employee.user.email}"></td>
-				        <td><input type="checkbox" class="ml-2" th:field="*{employees[__${itemStat.index}__].user.enabled}"></td>
+				        <td><input type="checkbox" class="mr-2" th:field="*{employees[__${itemStat.index}__].user.enabled}"></td>
 					</tr>
 			    </tbody>
 			</table>

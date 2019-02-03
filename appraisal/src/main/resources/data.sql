@@ -18,6 +18,15 @@ INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Stu
 INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('thomas.cruze@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1003', 2, false);
 INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1003, 2004);
 INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Thomas', 11230, 'Cruze', 'Glasgow', 1003);
+INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('john.doe@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1004', 2, false);
+INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1004, 2005);
+INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('John', 11231, 'Doe', 'Glasgow', 1004);
+INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('steve.jobs@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1005', 2, false);
+INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1005, 2006);
+INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Steve', 11232, 'Jobs', 'Glasgow', 1005);
+INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('paul.preistman@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1006', 2, false);
+INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1006, 2007);
+INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Paul', 11233, 'Preistman', 'Glasgow', 1006);
 
 INSERT INTO appraisal (last_update_date, project_id, signed_off, submit_date, appraisal_type, appraisal_year, employee_id, DESCRIPTION, OPTLOCK) 
 VALUES (sysdate, 2, true, sysdate, 1, '2018-01-01', 11227, 'Jack appraisal for 2018 year end', 0);

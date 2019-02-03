@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-
 import com.masteknet.appraisal.domain.models.Team;
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.AppraisalPk;
@@ -41,6 +40,7 @@ public interface VoteRepository extends CrudRepository<Vote, VoteId>{
 	
 	@Query(value = "SELECT new com.masteknet.appraisal.domain.models.Team (e, a, v) "
 			+ "FROM Employee e "
+			+ "JOIN e.user u ON u.enabled = true "
 			+ "LEFT JOIN Appraisal a ON e.id = a.appraisalPk.employee AND a.appraisalPk.appraisalCategory = ?1 "
 			+ "LEFT JOIN Vote v ON a = v.id.appraisal AND v.id.voter = ?2 "
 			+ "WHERE e.user.project=?3"

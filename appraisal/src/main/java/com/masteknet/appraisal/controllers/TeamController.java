@@ -46,7 +46,7 @@ public class TeamController extends AppraisalBase {
 	public String getAppraisalByEmployee(Model model, @PathVariable String employeeId) {
 		
 		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), getAppraisalCategory());
-		if(appraisal == null) {
+		if(appraisal == null || !appraisal.isSignedOff()) {
 			throw new AppraisalNotFoundException(employeeId);
 		} else {
 			model.addAttribute("employee", getEmployee(Long.parseLong(employeeId)));
