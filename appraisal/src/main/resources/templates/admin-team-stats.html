@@ -21,18 +21,35 @@
 		<h1>Appraisal <small class="text-muted"	th:text="${' Year ' + #temporals.year(year.year) + ' | ' + type.description}"></small></h1>
 		<p>As a team co-ordinator, you can perform admin tasks here.</p>
 	</div>
-	<h3 class="text-muted">Tasks available</h3>
-	<div class="card-deck">
-	    <div class="card">
-	      <a th:href="@{/admin/user}" class="card-body text-center btn btn-info">User Management</a>
-	    </div>
-	    <div class="card">
-	      <a th:href="@{/admin/stats}" class="card-body text-center btn btn-info">Team Statistics</a>
-	    </div>
-	    <div class="card">
-	      <a href="#" class="card-body text-center btn btn-info">Declare Results</a>
-	    </div>	    
-    </div>
+
+  	<div>
+  	<h3 class="text-muted">Team Statistics</h3>
+	<table class="table table-striped">
+			<thead>
+				<tr>
+			      	<th>Sr. No.</th>
+			      	<th>Employee Id</th>
+			        <th>First Name</th>
+			        <th>Last Name</th>
+			        <th>Email</th>
+			        <th>Appraisal</th>
+			        <th>Votes</th>
+				</tr>
+			</thead>
+		    <tbody>
+				<tr th:each="team, itemStat : *{teamStats}">
+			      	<td th:text="${itemStat.index+1}"></td>
+			      	<td th:text="${team.employee.id}"></td>
+			        <td th:text="${team.employee.firstName}"></td>
+			        <td th:text="${team.employee.lastName}"></td>
+			        <td th:text="${team.employee.user.email}"></td>
+			        <td th:text="${team.appraisal?.signedOff}"></td>
+			        <td th:text="${team.votes}"></td>
+				</tr>
+		    </tbody>
+	</table>
+	</div>
+
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->

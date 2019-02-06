@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.masteknet.appraisal.auth.IAuthenticationFacade;
 import com.masteknet.appraisal.domain.models.RegistrationForm;
+import com.masteknet.appraisal.domain.models.TeamStatistics;
+import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.AuthUserGroup;
 import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.entities.Project;
@@ -79,6 +81,11 @@ public class EmployeeService {
 		userGroups.add(userGroup);
 		user.setUsergroups(userGroups);
 		save(employee);
+	}
+	
+	public List<TeamStatistics> getTeamStats(AppraisalCategory category, Project project) {
+		
+		return employeeRepository.getTeamStats(category, project);
 	}
 	
 }

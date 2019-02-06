@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.masteknet.appraisal.domain.models.EmployeeWrapper;
+import com.masteknet.appraisal.domain.models.TeamStatistics;
 import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.entities.Project;
 
@@ -47,6 +48,15 @@ public class AdminController extends AppraisalBase {
 	@GetMapping("/admin")
 	public String getAdminHome() {
 		return "admin";
+	}
+	
+	@GetMapping("/admin/stats")
+	@Secured("ROLE_FACILITATOR")
+	public String getTeamStats(Model model) {
+		
+		List<TeamStatistics> teamStats = employeeService.getTeamStats(getAppraisalCategory(), getLoggedInEmployee().getUser().getProject());
+		model.addAttribute("teamStats", teamStats);
+		return "admin-team-stats";
 	}
 	
 }

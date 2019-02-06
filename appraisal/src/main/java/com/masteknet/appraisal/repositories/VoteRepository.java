@@ -43,8 +43,7 @@ public interface VoteRepository extends CrudRepository<Vote, VoteId>{
 			+ "JOIN e.user u ON u.enabled = true "
 			+ "LEFT JOIN Appraisal a ON e.id = a.appraisalPk.employee AND a.appraisalPk.appraisalCategory = ?1 "
 			+ "LEFT JOIN Vote v ON a = v.id.appraisal AND v.id.voter = ?2 "
-			+ "WHERE e.user.project=?3"
-			)
+			+ "WHERE e.user.project=?3")
 	List<Team> getTeam(AppraisalCategory category, Employee voter, Project project);
 
 }

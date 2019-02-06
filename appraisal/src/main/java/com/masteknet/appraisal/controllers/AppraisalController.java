@@ -1,5 +1,6 @@
 package com.masteknet.appraisal.controllers;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.masteknet.appraisal.entities.Appraisal;
+import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.exceptions.AppraisalNotFoundException;
 import com.masteknet.appraisal.services.AppraisalService;
 
@@ -23,9 +25,11 @@ public class AppraisalController extends AppraisalBase {
 	private AppraisalService appraisalService;
 	
 	@GetMapping("/appraisal")
-	public String getAppraisal(Model model) {
+	public String getAppraisal(Model model, HttpSession session) {
+		
+		Employee me = (Employee) session.getAttribute("loggedInEmployee");
 
-		Appraisal currentAppraisal = appraisalService.getAppraisal(getLoggedInEmployee(), getAppraisalCategory());
+		Appraisal currentAppraisal = appraisalService.getAppraisal(me, getAppraisalCategory());
 		if (currentAppraisal != null) {
 			model.addAttribute("appraisal", currentAppraisal);
 			return "appraisal-view";
