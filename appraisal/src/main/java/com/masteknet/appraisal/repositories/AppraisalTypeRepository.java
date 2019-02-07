@@ -10,5 +10,4 @@ public interface AppraisalTypeRepository extends CrudRepository<AppraisalType, B
 
 	AppraisalType findByActive(boolean active);
 	AppraisalType findByType(byte type);
-
 }

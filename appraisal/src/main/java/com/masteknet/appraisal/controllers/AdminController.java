@@ -12,12 +12,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import com.masteknet.appraisal.domain.models.EmployeeWrapper;
-import com.masteknet.appraisal.domain.models.TeamStatistics;
+
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.entities.Project;
 import com.masteknet.appraisal.services.EmployeeService;
+import com.masteknet.appraisal.wrappers.EmployeeWrapper;
+import com.masteknet.appraisal.wrappers.TeamStatistics;
 
 @Controller
 public class AdminController {

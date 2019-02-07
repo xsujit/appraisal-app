@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.masteknet.appraisal.domain.models.Team;
 import com.masteknet.appraisal.entities.Appraisal;
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.Comment;
@@ -23,6 +22,7 @@ import com.masteknet.appraisal.exceptions.AppraisalNotFoundException;
 import com.masteknet.appraisal.services.AppraisalService;
 import com.masteknet.appraisal.services.EmployeeService;
 import com.masteknet.appraisal.services.TeamService;
+import com.masteknet.appraisal.wrappers.Team;
 
 @Controller
 public class TeamController {

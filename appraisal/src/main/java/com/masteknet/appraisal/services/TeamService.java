@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.masteknet.appraisal.domain.models.Team;
 import com.masteknet.appraisal.entities.Appraisal;
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.Comment;
@@ -18,6 +17,7 @@ import com.masteknet.appraisal.highcharts.VotedAppraisal;
 import com.masteknet.appraisal.highcharts.VotesPerAppraisal;
 import com.masteknet.appraisal.repositories.CommentRepository;
 import com.masteknet.appraisal.repositories.VoteRepository;
+import com.masteknet.appraisal.wrappers.Team;
 
 @Service
 public class TeamService {

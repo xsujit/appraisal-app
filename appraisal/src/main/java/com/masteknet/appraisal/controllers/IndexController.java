@@ -9,12 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.masteknet.appraisal.domain.models.Progress;
+
 import com.masteknet.appraisal.entities.Appraisal;
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.services.AppraisalService;
 import com.masteknet.appraisal.services.TeamService;
+import com.masteknet.appraisal.wrappers.Progress;
 
 @Controller
 public class IndexController {

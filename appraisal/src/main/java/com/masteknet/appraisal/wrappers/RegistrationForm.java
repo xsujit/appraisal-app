@@ -1,4 +1,4 @@
-package com.masteknet.appraisal.domain.models;
+package com.masteknet.appraisal.wrappers;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.masteknet.appraisal.domain.models.RegistrationForm;
 import com.masteknet.appraisal.services.EmployeeService;
 import com.masteknet.appraisal.services.ProjectService;
 import com.masteknet.appraisal.services.UserDetailsServiceImpl;
+import com.masteknet.appraisal.wrappers.RegistrationForm;
 
 @Controller
 public class RegistrationController {

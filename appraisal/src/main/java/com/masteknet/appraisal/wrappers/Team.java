@@ -1,22 +1,23 @@
-package com.masteknet.appraisal.domain.models;
+package com.masteknet.appraisal.wrappers;
 
 import com.masteknet.appraisal.entities.Appraisal;
 import com.masteknet.appraisal.entities.Employee;
+import com.masteknet.appraisal.entities.Vote;
 
-public class TeamStatistics {
+public class Team {
 	
 	private Employee employee;
 	private Appraisal appraisal;
-	private long votes;
+	private Vote vote;
 	
-	public TeamStatistics() {
+	public Team() {
 		super();
 	}
-	public TeamStatistics(Employee employee, Appraisal appraisal, long votes) {
+	public Team(Employee employee, Appraisal appraisal, Vote vote) {
 		super();
 		this.employee = employee;
 		this.appraisal = appraisal;
-		this.votes = votes;
+		this.vote = vote;
 	}
 	
 	public Employee getEmployee() {
@@ -31,12 +32,11 @@ public class TeamStatistics {
 	public void setAppraisal(Appraisal appraisal) {
 		this.appraisal = appraisal;
 	}
-	public long getVotes() {
-		return votes;
+	public Vote getVote() {
+		return vote;
 	}
-	public void setVotes(long votes) {
-		this.votes = votes;
+	public void setVote(Vote vote) {
+		this.vote = vote;
 	}
 	
-
 }

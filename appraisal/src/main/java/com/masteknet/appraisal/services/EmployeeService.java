@@ -9,14 +9,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.masteknet.appraisal.auth.AppraisalUserPrincipal;
-import com.masteknet.appraisal.domain.models.RegistrationForm;
-import com.masteknet.appraisal.domain.models.TeamStatistics;
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.AuthUserGroup;
 import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.entities.Project;
 import com.masteknet.appraisal.entities.User;
 import com.masteknet.appraisal.repositories.EmployeeRepository;
+import com.masteknet.appraisal.wrappers.RegistrationForm;
+import com.masteknet.appraisal.wrappers.TeamStatistics;
 
 @Service
 public class EmployeeService {

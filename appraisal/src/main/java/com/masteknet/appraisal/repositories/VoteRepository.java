@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import com.masteknet.appraisal.domain.models.Team;
+
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.AppraisalPk;
 import com.masteknet.appraisal.entities.Employee;
@@ -14,6 +14,7 @@ import com.masteknet.appraisal.entities.Vote;
 import com.masteknet.appraisal.entities.VoteId;
 import com.masteknet.appraisal.highcharts.VotedAppraisal;
 import com.masteknet.appraisal.highcharts.VotesPerAppraisal;
+import com.masteknet.appraisal.wrappers.Team;
 
 @Repository
 public interface VoteRepository extends CrudRepository<Vote, VoteId>{
@@ -38,7 +39,7 @@ public interface VoteRepository extends CrudRepository<Vote, VoteId>{
 			+ "ORDER BY v.id.voter ")
 	List<VotedAppraisal> getVotedAppraisals(AppraisalCategory category);
 	
-	@Query(value = "SELECT new com.masteknet.appraisal.domain.models.Team (e, a, v) "
+	@Query(value = "SELECT new com.masteknet.appraisal.wrappers.Team (e, a, v) "
 			+ "FROM Employee e "
 			+ "JOIN e.user u ON u.enabled = true "
 			+ "LEFT JOIN Appraisal a ON e.id = a.appraisalPk.employee AND a.appraisalPk.appraisalCategory = ?1 "

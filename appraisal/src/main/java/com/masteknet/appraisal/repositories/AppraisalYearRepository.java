@@ -8,7 +8,7 @@ import com.masteknet.appraisal.entities.AppraisalYear;
 
 @Repository
 public interface AppraisalYearRepository extends CrudRepository<AppraisalYear, LocalDate> {
+	
 	AppraisalYear findByActive(boolean activeYear);
 	AppraisalYear findByYear(LocalDate date);
-
 }
