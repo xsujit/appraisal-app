@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,27 +16,33 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.masteknet.appraisal.highcharts.VotedAppraisal;
+import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.highcharts.DrillDown;
 import com.masteknet.appraisal.highcharts.VotesPerAppraisal;
 import com.masteknet.appraisal.highcharts.SeriesData;
+import com.masteknet.appraisal.services.AppraisalCategoryService;
 import com.masteknet.appraisal.services.TeamService;
 
 @Controller
-public class ResultController extends AppraisalBase {
+public class ResultController {
 	
 	@Autowired
 	private TeamService teamService;
+	@Autowired
+	protected AppraisalCategoryService appraisalCategoryService;
 
 	@GetMapping("/result/full-year")
-	public String getResult(Model model) {
+	public String getResult(Model model, HttpSession session) {
+		
+		AppraisalCategory appraisalCategory = (AppraisalCategory) session.getAttribute("appraisalCategory");
 
-		List<VotesPerAppraisal> fullYearResults = teamService.getVotesPerAppraisal(getAppraisalCategory());
+		List<VotesPerAppraisal> fullYearResults = teamService.getVotesPerAppraisal(appraisalCategory);
 		TreeMap<Long, Long> fullYearResultMap = new TreeMap<>();
 		TreeMap<Long, Long> midYearResultMap = new TreeMap<>();
 		for(VotesPerAppraisal result : fullYearResults) {
 			fullYearResultMap.put(result.getAppraisalPk().getEmployee().getId(), result.getVotes());
 		}
-		if (appraisalCategoryService.getAppraisalType().getType() == 1) { // if full year appraisal, then get mid year votes
+		if (appraisalCategory.getAppraisalType().getType() == 1) { // if full year appraisal, then get mid year votes
 			
 			List<VotesPerAppraisal> midYearResults = teamService.getVotesPerAppraisal(appraisalCategoryService.getAppraisalCategory((byte) 0));
 			for(VotesPerAppraisal result : midYearResults) {
@@ -63,16 +72,17 @@ public class ResultController extends AppraisalBase {
 	}
 	
 	@GetMapping("/result")
-	public String getResultDrill(Model model) throws JsonProcessingException {
+	public String getResultDrill(Model model, HttpSession session) throws JsonProcessingException {
 		
-		List<VotesPerAppraisal> fullYearResults = teamService.getVotesPerAppraisal(getAppraisalCategory());
+		AppraisalCategory appraisalCategory = (AppraisalCategory) session.getAttribute("appraisalCategory");
+		List<VotesPerAppraisal> fullYearResults = teamService.getVotesPerAppraisal(appraisalCategory);
 		List<SeriesData> seriesDataList = new ArrayList<>();
 		for(VotesPerAppraisal result : fullYearResults) {
 			seriesDataList.add(new SeriesData(result.getAppraisalPk().getEmployee().getFirstName(), result.getVotes(), result.getAppraisalPk().getEmployee().getId()));
 		}
 		ObjectMapper objectMapper = new ObjectMapper();
 		model.addAttribute("seriesData", objectMapper.writeValueAsString(seriesDataList));
-		List<VotedAppraisal> votedAppraisals = teamService.getVotedAppraisals(getAppraisalCategory());
+		List<VotedAppraisal> votedAppraisals = teamService.getVotedAppraisals(appraisalCategory);
 		List<DrillDown> drillDownList = new ArrayList<>(); // master list
 		for(VotedAppraisal votedAppraisal : votedAppraisals) {
 			boolean found = false;

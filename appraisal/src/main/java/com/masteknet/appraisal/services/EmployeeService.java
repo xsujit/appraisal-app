@@ -3,10 +3,12 @@ package com.masteknet.appraisal.services;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.masteknet.appraisal.auth.IAuthenticationFacade;
+import com.masteknet.appraisal.auth.AppraisalUserPrincipal;
 import com.masteknet.appraisal.domain.models.RegistrationForm;
 import com.masteknet.appraisal.domain.models.TeamStatistics;
 import com.masteknet.appraisal.entities.AppraisalCategory;
@@ -20,13 +22,11 @@ import com.masteknet.appraisal.repositories.EmployeeRepository;
 public class EmployeeService {
 
 	private final EmployeeRepository employeeRepository;
-	private IAuthenticationFacade authenticationFacade;
 	
 	@Autowired
-	public EmployeeService(EmployeeRepository employeeRepository, IAuthenticationFacade authenticationFacade) {
+	public EmployeeService(EmployeeRepository employeeRepository) {
 		super();
 		this.employeeRepository = employeeRepository;
-		this.authenticationFacade = authenticationFacade;
 	}
 
 	public boolean employeeIdExists(long employeeId) { // before authentication
@@ -37,8 +37,11 @@ public class EmployeeService {
 	}
 	
 	public Employee getLoggedInEmployee() {
-		if(authenticationFacade.getPrincipal() != null) {
-			return employeeRepository.findByUserId(authenticationFacade.getPrincipal().getUserId());	
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			AppraisalUserPrincipal principal = (AppraisalUserPrincipal) authentication.getPrincipal();
+			return employeeRepository.findByUserId(principal.getUserId());
 		}
 		return null;
 	}

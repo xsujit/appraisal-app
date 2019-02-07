@@ -11,16 +11,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.masteknet.appraisal.domain.models.RegistrationForm;
+import com.masteknet.appraisal.services.EmployeeService;
 import com.masteknet.appraisal.services.ProjectService;
 import com.masteknet.appraisal.services.UserDetailsServiceImpl;
 
 @Controller
-public class RegistrationController extends AppraisalBase {
+public class RegistrationController {
 		
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
 	private UserDetailsServiceImpl userService;
+	@Autowired
+	protected EmployeeService employeeService;
 
 	@GetMapping("/register")
     public String getRegistrationForm(Model model) {
