@@ -1,8 +1,8 @@
 INSERT INTO appraisal_year (id, year, active) VALUES (1, '2018-01-01', '1');
 INSERT INTO appraisal_year (id, year, active) VALUES (2, '2017-01-01', '0');
 INSERT INTO appraisal_year (id, year, active) VALUES (3, '2019-01-01', '0');
-INSERT INTO appraisal_type (id, type, description, active) VALUES (1, '0', 'Mid Year', 0);
-INSERT INTO appraisal_type (id, type, description, active) VALUES (2, '1', 'Year End', 1);
+INSERT INTO appraisal_type (id, type, description, active) VALUES (1, '0', 'Mid Year', 1);
+INSERT INTO appraisal_type (id, type, description, active) VALUES (2, '1', 'Year End', 0);
 INSERT INTO project (id, description, title) VALUES ('1', 'SLC Onsite TnM', 'SLC Onsite', );
 INSERT INTO project (id, description, title) VALUES ('2', 'Morrisons Onsite TnM', 'Morrisons Onsite', );
 INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('jack.bauer@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1000', 2, true);

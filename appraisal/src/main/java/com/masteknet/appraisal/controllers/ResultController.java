@@ -1,25 +1,14 @@
 package com.masteknet.appraisal.controllers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.masteknet.appraisal.highcharts.VotedAppraisal;
 import com.masteknet.appraisal.entities.AppraisalCategory;
-import com.masteknet.appraisal.highcharts.DrillDown;
-import com.masteknet.appraisal.highcharts.VotesPerAppraisal;
-import com.masteknet.appraisal.highcharts.SeriesData;
 import com.masteknet.appraisal.services.AppraisalCategoryService;
 import com.masteknet.appraisal.services.TeamService;
 
@@ -35,39 +24,16 @@ public class ResultController {
 	public String getResult(Model model, HttpSession session) {
 		
 		AppraisalCategory appraisalCategory = (AppraisalCategory) session.getAttribute("appraisalCategory");
-
-		List<VotesPerAppraisal> fullYearResults = teamService.getVotesPerAppraisal(appraisalCategory);
-		TreeMap<Long, Long> fullYearResultMap = new TreeMap<>();
-		TreeMap<Long, Long> midYearResultMap = new TreeMap<>();
-		for(VotesPerAppraisal result : fullYearResults) {
-			fullYearResultMap.put(result.getAppraisalPk().getEmployee().getId(), result.getVotes());
-		}
-		if (appraisalCategory.getAppraisalType().getType() == 1) { // if full year appraisal, then get mid year votes
+		if (appraisalCategory.getAppraisalType().getType() == 0) { // mid year
 			
-			List<VotesPerAppraisal> midYearResults = teamService.getVotesPerAppraisal(appraisalCategoryService.getAppraisalCategory((byte) 0));
-			for(VotesPerAppraisal result : midYearResults) {
-				midYearResultMap.put(result.getAppraisalPk().getEmployee().getId(), result.getVotes());
-			}
-			
-			if (!fullYearResultMap.keySet().equals( midYearResultMap.keySet() )) {
-				HashSet<Long> unionKeys = new HashSet<>(fullYearResultMap.keySet());
-				unionKeys.addAll(midYearResultMap.keySet());
-				unionKeys.removeAll(fullYearResultMap.keySet());
-				for (Long i : unionKeys) {
-					fullYearResultMap.put(i, (long) 0);
-				}
-				unionKeys.clear();
-				unionKeys.addAll(midYearResultMap.keySet());
-				unionKeys.addAll(fullYearResultMap.keySet());
-				unionKeys.removeAll(midYearResultMap.keySet());
-				for (Long i : unionKeys) {
-					midYearResultMap.put(i, (long) 0);
-				}
-			}
+			model.addAttribute("midYearResultMap", teamService.computeMidYearResults(appraisalCategory));
+			model.addAttribute("fullYearResultMap", new TreeMap<>());			
+		} else { // full year
+			Map<String, TreeMap<Long, Long>> combinedResultsMap = 
+					teamService.computeFullYearResults(appraisalCategory, appraisalCategoryService.getAppraisalCategory((byte) 0));
+			model.addAttribute("midYearResultMap", combinedResultsMap.get("mid"));
+			model.addAttribute("fullYearResultMap", combinedResultsMap.get("full"));
 		}
-		System.out.println(fullYearResultMap);
-		model.addAttribute("fullYearResultMap", fullYearResultMap);
-		model.addAttribute("midYearResultMap", midYearResultMap);
 		return "result-year";
 	}
 	
@@ -75,35 +41,9 @@ public class ResultController {
 	public String getResultDrill(Model model, HttpSession session) throws JsonProcessingException {
 		
 		AppraisalCategory appraisalCategory = (AppraisalCategory) session.getAttribute("appraisalCategory");
-		List<VotesPerAppraisal> fullYearResults = teamService.getVotesPerAppraisal(appraisalCategory);
-		List<SeriesData> seriesDataList = new ArrayList<>();
-		for(VotesPerAppraisal result : fullYearResults) {
-			seriesDataList.add(new SeriesData(result.getAppraisalPk().getEmployee().getFirstName(), result.getVotes(), result.getAppraisalPk().getEmployee().getId()));
-		}
-		ObjectMapper objectMapper = new ObjectMapper();
-		model.addAttribute("seriesData", objectMapper.writeValueAsString(seriesDataList));
-		List<VotedAppraisal> votedAppraisals = teamService.getVotedAppraisals(appraisalCategory);
-		List<DrillDown> drillDownList = new ArrayList<>(); // master list
-		for(VotedAppraisal votedAppraisal : votedAppraisals) {
-			boolean found = false;
-			if(!drillDownList.isEmpty()) {
-				for(DrillDown ddt : drillDownList) {
-					if(ddt.getId() == votedAppraisal.getAppraisalPk().getEmployee().getId()) {
-						found = true;
-						ddt.getData().put(votedAppraisal.getVoter().getId(), 1); 
-					}
-				}
-			} 
-			if (!found) {
-				Map<Long, Integer> dataMap = new HashMap<>();
-				DrillDown ddt = new DrillDown();
-				ddt.setId(votedAppraisal.getAppraisalPk().getEmployee().getId());
-				dataMap.put(votedAppraisal.getVoter().getId(), 1);
-				ddt.setData(dataMap);
-				drillDownList.add(ddt);	
-			}			
-		}
-		model.addAttribute("drillDown", objectMapper.writeValueAsString(drillDownList));
+		Map<String, String> resultsMap = teamService.computeDrillDownResults(appraisalCategory);
+		model.addAttribute("seriesData", resultsMap.get("seriesData"));
+		model.addAttribute("drillDown", resultsMap.get("drillDown"));
 		return "result-current";
 	}
 

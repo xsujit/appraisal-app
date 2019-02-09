@@ -10,7 +10,7 @@ import com.masteknet.appraisal.services.AppraisalCategoryService;
 import com.masteknet.appraisal.services.EmployeeService;
 
 @Component
-public class LoginListener implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
+public class AuthenticationEventListener implements ApplicationListener<InteractiveAuthenticationSuccessEvent> {
 	
 	@Autowired
     private HttpSession session;

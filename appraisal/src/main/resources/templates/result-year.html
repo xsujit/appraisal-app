@@ -4,17 +4,27 @@
 <head>
     <title>View your appraisal</title>
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
 
 <script>
 
 $(function () {
-	var employees = [[${fullYearResultMap.keySet()}]];
-	var midYearVotes = [[${midYearResultMap.values()}]];
-	var fullYearVotes = [[${fullYearResultMap.values()}]];
-    var myChart = Highcharts.chart('votesChart', {
+	var seriesData = [];
+	var employees = [[${midYearResultMap.keySet()}]];
+	var midYearSeries = { name: "Appraisal 2018 Mid Year", data: [[${midYearResultMap.values()}]] }
+	seriesData.push(midYearSeries);
+	if ([[${fullYearResultMap.keySet()}]].length > 0) { // add full year results to series data
+		employees = [[${midYearResultMap.keySet()}]];
+		console.log("Inside length > 0");
+		var fullYearSeries = { name: "Appraisal 2018 Full Year", data: [[${fullYearResultMap.values()}]] }
+		seriesData.push(fullYearSeries);
+	}
+
+	var myChart = Highcharts.chart('votesChart', {
         chart: {
         	height: (9 / 16 * 100) + '%',
-            type: 'bar'
+            type: 'column'
         },
         title: {
             text: 'Vote Distribution'
@@ -28,13 +38,7 @@ $(function () {
                 text: 'Votes received'
             }
         },
-        series: [{
-            name: 'Appraisal 2018 Mid Year',
-            data: midYearVotes
-        },{
-            name: 'Appraisal 2018 Full Year',
-            data: fullYearVotes
-        }]
+        series: seriesData
     });
 });
 
