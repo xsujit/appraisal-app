@@ -8,8 +8,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.masteknet.appraisal.services.EmployeeService;
 import com.masteknet.appraisal.services.ProjectService;
 import com.masteknet.appraisal.services.UserDetailsServiceImpl;
@@ -34,7 +32,7 @@ public class RegistrationController {
     }	
 	
 	@PostMapping("/register")
-	public String registerUser(@Valid @ModelAttribute RegistrationForm registrationForm, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+	public String registerUser(@Valid @ModelAttribute RegistrationForm registrationForm, BindingResult result, Model model) {
 		
 		model.addAttribute("projects", projectService.createProjectMap()); // so that drop-down values are still available in case of an error
 		if (result.hasErrors()) {

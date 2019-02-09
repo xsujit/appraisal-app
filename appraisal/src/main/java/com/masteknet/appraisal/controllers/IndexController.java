@@ -2,14 +2,13 @@ package com.masteknet.appraisal.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.ModelAttribute;
 import com.masteknet.appraisal.entities.Appraisal;
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.Employee;
@@ -36,10 +35,9 @@ public class IndexController {
 	}
 	
 	@GetMapping(value= {"/index", "/"})
-	public String getIndexPage(Model model, HttpSession session) {
+	public String getIndexPage(Model model, @ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
 		if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
-			Map<Integer, Progress> progressMap = getStagesComplete(
-					(AppraisalCategory) session.getAttribute("appraisalCategory"), (Employee) session.getAttribute("loggedInEmployee"));
+			Map<Integer, Progress> progressMap = getStagesComplete(category, me);
 			double count = countStagesComplete(progressMap);
 			model.addAttribute("percentComplete", calculatePercentageComplete(count));
 			model.addAttribute("progressMap", progressMap);

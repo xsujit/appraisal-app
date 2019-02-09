@@ -2,13 +2,14 @@ package com.masteknet.appraisal.controllers;
 
 import java.util.Map;
 import java.util.TreeMap;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.masteknet.appraisal.entities.AppraisalCategory;
+import com.masteknet.appraisal.entities.Employee;
 import com.masteknet.appraisal.services.AppraisalCategoryService;
 import com.masteknet.appraisal.services.TeamService;
 
@@ -21,16 +22,15 @@ public class ResultController {
 	protected AppraisalCategoryService appraisalCategoryService;
 
 	@GetMapping("/result/full-year")
-	public String getResult(Model model, HttpSession session) {
+	public String getResult(Model model, @ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
 		
-		AppraisalCategory appraisalCategory = (AppraisalCategory) session.getAttribute("appraisalCategory");
-		if (appraisalCategory.getAppraisalType().getType() == 0) { // mid year
+		if (category.getAppraisalType().getType() == 0) { // mid year
 			
-			model.addAttribute("midYearResultMap", teamService.computeMidYearResults(appraisalCategory));
+			model.addAttribute("midYearResultMap", teamService.computeMidYearResults(category));
 			model.addAttribute("fullYearResultMap", new TreeMap<>());			
 		} else { // full year
 			Map<String, TreeMap<Long, Long>> combinedResultsMap = 
-					teamService.computeFullYearResults(appraisalCategory, appraisalCategoryService.getAppraisalCategory((byte) 0));
+					teamService.computeFullYearResults(category, appraisalCategoryService.getAppraisalCategory((byte) 0));
 			model.addAttribute("midYearResultMap", combinedResultsMap.get("mid"));
 			model.addAttribute("fullYearResultMap", combinedResultsMap.get("full"));
 		}
@@ -38,10 +38,10 @@ public class ResultController {
 	}
 	
 	@GetMapping("/result")
-	public String getResultDrill(Model model, HttpSession session) throws JsonProcessingException {
+	public String getResultDrill(Model model, @ModelAttribute("loggedInEmployee") Employee me, 
+			@ModelAttribute("appraisalCategory") AppraisalCategory category) throws JsonProcessingException {
 		
-		AppraisalCategory appraisalCategory = (AppraisalCategory) session.getAttribute("appraisalCategory");
-		Map<String, String> resultsMap = teamService.computeDrillDownResults(appraisalCategory);
+		Map<String, String> resultsMap = teamService.computeDrillDownResults(category);
 		model.addAttribute("seriesData", resultsMap.get("seriesData"));
 		model.addAttribute("drillDown", resultsMap.get("drillDown"));
 		return "result-current";

@@ -1,6 +1,5 @@
 package com.masteknet.appraisal.controllers;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.masteknet.appraisal.entities.Appraisal;
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.Employee;
@@ -27,10 +25,9 @@ public class AppraisalController {
 	private AppraisalService appraisalService;
 	
 	@GetMapping("/appraisal")
-	public String getAppraisal(Model model, HttpSession session) {
+	public String getAppraisal(Model model, @ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
 
-		Appraisal currentAppraisal = appraisalService.getAppraisal(
-				(Employee) session.getAttribute("loggedInEmployee"), (AppraisalCategory) session.getAttribute("appraisalCategory"));
+		Appraisal currentAppraisal = appraisalService.getAppraisal(me, category);
 		if (currentAppraisal != null) {
 			model.addAttribute("appraisal", currentAppraisal);
 			return "appraisal-view";
@@ -42,12 +39,13 @@ public class AppraisalController {
 	}
 	
 	@PostMapping("/appraisal")
-	public String setAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, HttpSession session) {
+	public String setAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, 
+			@ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
 		if (result.hasErrors()) {
 			return "appraisal-submit";
 		}
 		try {
-			appraisalService.save(appraisal, (AppraisalCategory) session.getAttribute("appraisalCategory"), (Employee) session.getAttribute("loggedInEmployee"));
+			appraisalService.save(appraisal, category, me);
 		} catch (DataAccessException dae) {
 			result.rejectValue("description", "error.appraisal", ERROR_MESSAGE);
 			return "appraisal-submit";
@@ -56,10 +54,9 @@ public class AppraisalController {
 	}
 	
 	@GetMapping("/appraisal/edit")
-	public String editAppraisal(Model model, HttpSession session) {
+	public String editAppraisal(Model model, @ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
 		
-		Appraisal currentAppraisal = appraisalService.getAppraisal(
-				(Employee) session.getAttribute("loggedInEmployee"), (AppraisalCategory) session.getAttribute("appraisalCategory"));
+		Appraisal currentAppraisal = appraisalService.getAppraisal(me, category);
 		if(currentAppraisal == null) {
 			throw new AppraisalNotFoundException("Appraisal not found.");
 		} else {
@@ -73,13 +70,14 @@ public class AppraisalController {
 	}
 	
 	@PutMapping("/appraisal/edit")
-	public String updateAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, HttpSession session) {
+	public String updateAppraisal(@Valid @ModelAttribute Appraisal appraisal, BindingResult result, 
+			@ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
 		
 		if (result.hasErrors()) {
 			return "appraisal-submit";
 		}
 		try {
-			appraisalService.save(appraisal, (AppraisalCategory) session.getAttribute("appraisalCategory"), (Employee) session.getAttribute("loggedInEmployee"));
+			appraisalService.save(appraisal, category, me);
 		} catch (DataAccessException dae) {
 			result.rejectValue("description", "error.appraisal", ERROR_MESSAGE);
 			return "appraisal-submit";
@@ -88,10 +86,11 @@ public class AppraisalController {
 	}
 	
 	@GetMapping("/appraisal/sign-off")
-	public String setAppraisalSignOff(RedirectAttributes redirectAttributes, HttpSession session) {
+	public String setAppraisalSignOff(RedirectAttributes redirectAttributes, 
+			@ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
 		
 		try {
-			appraisalService.signOff((AppraisalCategory) session.getAttribute("appraisalCategory"), (Employee) session.getAttribute("loggedInEmployee"));
+			appraisalService.signOff(category, me);
 		} catch (DataAccessException dae) {
 			return "redirect:/appraisal?error=Unable+to+persist+data.+Please+contact+support.";
 		}

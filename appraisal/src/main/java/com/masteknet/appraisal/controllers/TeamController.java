@@ -1,8 +1,6 @@
 package com.masteknet.appraisal.controllers;
 
 import java.util.ArrayList;
-
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import com.masteknet.appraisal.entities.Appraisal;
 import com.masteknet.appraisal.entities.AppraisalCategory;
 import com.masteknet.appraisal.entities.Comment;
@@ -39,9 +36,8 @@ public class TeamController {
 	}
 		
 	@GetMapping("/team")
-	public String getTeam(Model model, HttpSession session) {
-		ArrayList<Team> teamList = teamService.getTeam(
-				(AppraisalCategory) session.getAttribute("appraisalCategory"), (Employee) session.getAttribute("loggedInEmployee"));
+	public String getTeam(Model model, @ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
+		ArrayList<Team> teamList = teamService.getTeam(category, me);
 		if (teamList != null) {
 			model.addAttribute("teamList", teamList);
 			return "team";
@@ -50,10 +46,10 @@ public class TeamController {
 	}
 	
 	@GetMapping("/team/{employeeId}")
-	public String getAppraisalByEmployee(Model model, @PathVariable String employeeId, HttpSession session) {
+	public String getAppraisalByEmployee(Model model, @PathVariable String employeeId, 
+			@ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
 		
-		Employee me = (Employee) session.getAttribute("loggedInEmployee");
-		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), (AppraisalCategory) session.getAttribute("appraisalCategory"));
+		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), category);
 		if(appraisal == null || !appraisal.isSignedOff()) {
 			throw new AppraisalNotFoundException(employeeId);
 		} else {
@@ -67,10 +63,10 @@ public class TeamController {
 	}
 	
 	@GetMapping("/team/{employeeId}/vote-a-plus")
-	public String saveVote(@PathVariable String employeeId, HttpSession session) {
+	public String saveVote(@PathVariable String employeeId, @ModelAttribute("loggedInEmployee") Employee me, 
+			@ModelAttribute("appraisalCategory") AppraisalCategory category) {
 		
-		Employee me = (Employee) session.getAttribute("loggedInEmployee");
-		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), (AppraisalCategory) session.getAttribute("appraisalCategory"));
+		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), category);
 		if(appraisal == null) {
 			throw new AppraisalNotFoundException(employeeId);
 		}
@@ -86,10 +82,10 @@ public class TeamController {
 	}
 	
 	@PostMapping("/team/{employeeId}/comment")
-	public String saveComment(@Valid @ModelAttribute Comment comment, BindingResult result, @PathVariable String employeeId, Model model, HttpSession session) {
+	public String saveComment(@Valid @ModelAttribute Comment comment, BindingResult result, @PathVariable String employeeId, 
+			Model model, @ModelAttribute("loggedInEmployee") Employee me, @ModelAttribute("appraisalCategory") AppraisalCategory category) {
 		
-		Employee me = (Employee) session.getAttribute("loggedInEmployee");
-		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), (AppraisalCategory) session.getAttribute("appraisalCategory"));
+		Appraisal appraisal = appraisalService.getAppraisal(getEmployee(Long.parseLong(employeeId)), category);
 		if(appraisal == null) {
 			throw new AppraisalNotFoundException(employeeId);
 		}
