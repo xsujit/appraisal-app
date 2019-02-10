@@ -24,14 +24,14 @@
 		<p>Review | Comment | Vote</p>
 	</div>
 
-	<div th:object="${loggedInEmployee}">
+	<div th:object="${employee}">
 		<div class="card bg-light">
 			<div class="card-header">Employee Details</div>
 			<div class="card-body">
 				<table class="table table-borderless table-sm">
 					<tr>
 						<th scope="row">Name</th>
-						<td class="text-capitalize" th:text="${#strings.toString(employee)}"></td>
+						<td class="text-capitalize" th:text="*{firstName + ' ' + lastName}"></td>
 						<th scope="row">Project IO</th>
 						<td th:text="*{user.project.id}"></td>
 					</tr>
