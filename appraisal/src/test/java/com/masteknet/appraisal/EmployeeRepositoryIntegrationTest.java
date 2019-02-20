@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.masteknet.appraisal.entities.Employee;
-import com.masteknet.appraisal.entities.Project;
-import com.masteknet.appraisal.entities.User;
-import com.masteknet.appraisal.repositories.EmployeeRepository;
+
+import com.company.appraisal.entities.Employee;
+import com.company.appraisal.entities.Project;
+import com.company.appraisal.entities.User;
+import com.company.appraisal.repositories.EmployeeRepository;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
