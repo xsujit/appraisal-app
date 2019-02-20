@@ -43,7 +43,8 @@
 			        <td th:text="${team.employee.firstName}"></td>
 			        <td th:text="${team.employee.lastName}"></td>
 			        <td th:text="${team.employee.user.email}"></td>
-			        <td th:text="${team.appraisal?.signedOff}"></td>
+			        <!--  <td th:text="${team.appraisal?.signedOff ? 'Y' : 'N'}"></td>-->
+			        <td><span th:text="${team.appraisal?.signedOff ? 'Done' : 'Pending'}"></span></td>
 			        <td th:text="${team.votes}"></td>
 				</tr>
 		    </tbody>

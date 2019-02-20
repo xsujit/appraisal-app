@@ -1,8 +1,8 @@
 INSERT INTO appraisal_year (id, year, active) VALUES (1, '2018-01-01', '1');
 INSERT INTO appraisal_year (id, year, active) VALUES (2, '2017-01-01', '0');
 INSERT INTO appraisal_year (id, year, active) VALUES (3, '2019-01-01', '0');
-INSERT INTO appraisal_type (id, type, description, active) VALUES (1, '0', 'Mid Year', 1);
-INSERT INTO appraisal_type (id, type, description, active) VALUES (2, '1', 'Year End', 0);
+INSERT INTO appraisal_type (id, type, description, active) VALUES (1, '0', 'Mid Year', 0);
+INSERT INTO appraisal_type (id, type, description, active) VALUES (2, '1', 'Year End', 1);
 INSERT INTO project (id, description, title) VALUES ('1', 'SLC Onsite TnM', 'SLC Onsite', );
 INSERT INTO project (id, description, title) VALUES ('2', 'Morrisons Onsite TnM', 'Morrisons Onsite', );
 INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('jack.bauer@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1000', 2, true);
@@ -24,9 +24,9 @@ INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Joh
 INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('steve.jobs@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1005', 2, false);
 INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1005, 2006);
 INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Steve', 11232, 'Jobs', 'Glasgow', 1005);
-INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('paul.preistman@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1006', 2, false);
+INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('paul.johnson@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1006', 2, false);
 INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1006, 2007);
-INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Paul', 11233, 'Preistman', 'Glasgow', 1006);
+INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Paul', 11233, 'Johnson', 'Glasgow', 1006);
 
 INSERT INTO appraisal (last_update_date, project_id, signed_off, submit_date, appraisal_type, appraisal_year, employee_id, DESCRIPTION, OPTLOCK) 
 VALUES (sysdate, 2, true, sysdate, 1, '2018-01-01', 11227, 'Jack appraisal for 2018 year end', 0);
