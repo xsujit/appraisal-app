@@ -8,25 +8,13 @@ INSERT INTO project (id, description, title) VALUES ('2', 'Morrisons Onsite TnM'
 INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('jack.bauer@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1000', 2, true);
 INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1000, 2000);
 INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('FACILITATOR', 1000, 2001);
-INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Jack', 11227, 'Bauer', 'Glasgow', 1000);
+INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Jack', 11227, 'Bauer', 'Bradford', 1000);
 INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('james.bond@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1001', 2, true);
 INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1001, 2002);
-INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('James', 11228, 'Bond', 'Glasgow', 1001);
+INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('James', 11228, 'Bond', 'Bradford', 1001);
 INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('stuart.little@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1002', 1, true);
 INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1002, 2003);
-INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Stuart', 11229, 'Little', 'Mumbai', 1002);
-INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('thomas.cruze@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1003', 2, false);
-INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1003, 2004);
-INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Thomas', 11230, 'Cruze', 'Glasgow', 1003);
-INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('john.doe@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1004', 2, false);
-INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1004, 2005);
-INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('John', 11231, 'Doe', 'Glasgow', 1004);
-INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('steve.jobs@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1005', 2, false);
-INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1005, 2006);
-INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Steve', 11232, 'Jobs', 'Glasgow', 1005);
-INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('paul.johnson@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1006', 2, false);
-INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1006, 2007);
-INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Paul', 11233, 'Johnson', 'Glasgow', 1006);
+INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Stuart', 11229, 'Little', 'Glasgow', 1002);
 
 INSERT INTO appraisal (last_update_date, project_id, signed_off, submit_date, appraisal_type, appraisal_year, employee_id, DESCRIPTION, OPTLOCK) 
 VALUES (sysdate, 2, true, sysdate, 1, '2018-01-01', 11227, 'Jack appraisal for 2018 year end', 0);
@@ -47,9 +35,7 @@ VALUES (sysdate, 1, true, sysdate, 0, '2018-01-01', 11229, 'Stuart appraisal for
 INSERT INTO VOTE (SUBMIT_DATE, VOTER_EMPLOYEE_ID, APPRAISAL_APPRAISAL_TYPE, APPRAISAL_APPRAISAL_YEAR, APPRAISAL_EMPLOYEE_ID) 
 VALUES (SYSDATE, 11228, 0, '2018-01-01', 11227);
 INSERT INTO VOTE (SUBMIT_DATE, VOTER_EMPLOYEE_ID, APPRAISAL_APPRAISAL_TYPE, APPRAISAL_APPRAISAL_YEAR, APPRAISAL_EMPLOYEE_ID) 
-VALUES (SYSDATE, 11228, 1, '2018-01-01', 11229);
-INSERT INTO VOTE (SUBMIT_DATE, VOTER_EMPLOYEE_ID, APPRAISAL_APPRAISAL_TYPE, APPRAISAL_APPRAISAL_YEAR, APPRAISAL_EMPLOYEE_ID) 
-VALUES (SYSDATE, 11228, 0, '2018-01-01', 11229);
+VALUES (SYSDATE, 11228, 1, '2018-01-01', 11227);
 INSERT INTO VOTE (SUBMIT_DATE, VOTER_EMPLOYEE_ID, APPRAISAL_APPRAISAL_TYPE, APPRAISAL_APPRAISAL_YEAR, APPRAISAL_EMPLOYEE_ID) 
 VALUES (SYSDATE, 11227, 0, '2018-01-01', 11228);
 INSERT INTO VOTE (SUBMIT_DATE, VOTER_EMPLOYEE_ID, APPRAISAL_APPRAISAL_TYPE, APPRAISAL_APPRAISAL_YEAR, APPRAISAL_EMPLOYEE_ID) 
@@ -58,6 +44,4 @@ VALUES (SYSDATE, 11227, 1, '2018-01-01', 11228);
 INSERT INTO COMMENT (ID, MESSAGE, SUBMIT_DATE, COMMENTER_EMPLOYEE_ID, APPRAISAL_APPRAISAL_TYPE, APPRAISAL_APPRAISAL_YEAR, APPRAISAL_EMPLOYEE_ID)
 VALUES (1000, 'Good job!', sysdate, 11228, 0, '2018-01-01', 11227);
 INSERT INTO COMMENT (ID, MESSAGE, SUBMIT_DATE, COMMENTER_EMPLOYEE_ID, APPRAISAL_APPRAISAL_TYPE, APPRAISAL_APPRAISAL_YEAR, APPRAISAL_EMPLOYEE_ID)
-VALUES (1001, 'I agree, this has been a good performance. He has guided me through my stories and solved difficult queries.', sysdate, 11229, 0, '2018-01-01', 11227);
-INSERT INTO COMMENT (ID, MESSAGE, SUBMIT_DATE, COMMENTER_EMPLOYEE_ID, APPRAISAL_APPRAISAL_TYPE, APPRAISAL_APPRAISAL_YEAR, APPRAISAL_EMPLOYEE_ID)
-VALUES (1002, 'I agree, this has been a good performance. He has guided me through my stories and solved difficult queries.', sysdate, 11228, 1, '2018-01-01', 11229);
+VALUES (1001, 'I agree, this has been a good performance. He has guided me through my stories and solved difficult queries.', sysdate, 11228, 1, '2018-01-01', 11227);
