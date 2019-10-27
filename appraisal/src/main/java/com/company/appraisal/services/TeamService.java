@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class TeamService {
 
+	private static final int VOTE = 1;
 	// repositories
 	private final VoteRepository voteRepository;
 	private final CommentRepository commentRepository;
@@ -84,7 +85,7 @@ public class TeamService {
 				for(DrillDown ddt : drillDownList) {
 					if(ddt.getId() == votedAppraisal.getAppraisalPk().getEmployee().getId()) {
 						found = true;
-						ddt.getData().put(votedAppraisal.getVoter().getId(), 1); 
+						ddt.getData().put(votedAppraisal.getVoter().getId(), VOTE); 
 					}
 				}
 			} 
@@ -92,7 +93,7 @@ public class TeamService {
 				Map<Long, Integer> dataMap = new HashMap<>();
 				DrillDown ddt = new DrillDown();
 				ddt.setId(votedAppraisal.getAppraisalPk().getEmployee().getId());
-				dataMap.put(votedAppraisal.getVoter().getId(), 1);
+				dataMap.put(votedAppraisal.getVoter().getId(), VOTE);
 				ddt.setData(dataMap);
 				drillDownList.add(ddt);	
 			}			
