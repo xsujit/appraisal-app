@@ -6,14 +6,17 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.company.appraisal.AppraisalApplication;
 import com.company.appraisal.entities.Employee;
 import com.company.appraisal.entities.Project;
 import com.company.appraisal.entities.User;
 import com.company.appraisal.repositories.EmployeeRepository;
 
 @RunWith(SpringRunner.class)
+@ContextConfiguration(classes=AppraisalApplication.class)
 @DataJpaTest
 public class EmployeeRepositoryIntegrationTest {
 	

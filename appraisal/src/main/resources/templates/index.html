@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
 <head>
-	<link href="/open-iconic/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+	<link th:href="@{/open-iconic/font/css/open-iconic-bootstrap.css}" rel="stylesheet">
     <title> Get started</title>
 </head>
 
@@ -13,7 +13,7 @@
 	  <div class="container">
 	    <h1 class="display-3">Hello, <small>welcome to appraisal 2018</small></h1>
 	    <p>Appraisal process simplified in 4 easy steps.</p>
-	    <p><a class="btn btn-primary btn-lg" href="/appraisal" role="button">Get started &raquo;</a></p>
+	    <p><a class="btn btn-primary btn-lg" th:href="@{/appraisal}" role="button">Get started &raquo;</a></p>
 	  </div>
 	</div>
 
