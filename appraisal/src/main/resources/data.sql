@@ -1,6 +1,9 @@
-INSERT INTO appraisal_year (id, year, active) VALUES (1, '2018-01-01', '1');
+INSERT INTO appraisal_year (id, year, active) VALUES (1, '2018-01-01', '0');
 INSERT INTO appraisal_year (id, year, active) VALUES (2, '2017-01-01', '0');
 INSERT INTO appraisal_year (id, year, active) VALUES (3, '2019-01-01', '0');
+INSERT INTO appraisal_year (id, year, active) VALUES (4, '2020-01-01', '0');
+INSERT INTO appraisal_year (id, year, active) VALUES (5, '2021-01-01', '0');
+INSERT INTO appraisal_year (id, year, active) VALUES (6, '2022-01-01', '1');
 
 INSERT INTO appraisal_type (id, type, description, active) VALUES (1, '0', 'Mid Year', 0);
 INSERT INTO appraisal_type (id, type, description, active) VALUES (2, '1', 'Year End', 1);
@@ -17,6 +20,7 @@ INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1001, 2002
 INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('James', 11228, 'Bond', 'Bradford', 1001);
 INSERT INTO user (email, password, id, project_id, ENABLED) VALUES ('stuart.little@mastek.com', '$2a$11$N82GiTabGmYk45vXnGPhG.2QnAOsAlrdHlamiA7o8LWFw45i0r8j2', '1002', 1, true);
 INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('USER', 1002, 2003);
+INSERT INTO auth_user_group (auth_group, user_id, id) VALUES ('FACILITATOR', 1002, 2004);
 INSERT INTO employee (first_name, id, last_name, location, user_id) VALUES ('Stuart', 11229, 'Little', 'Glasgow', 1002);
 
 INSERT INTO appraisal (last_update_date, project_id, signed_off, submit_date, appraisal_type, appraisal_year, employee_id, DESCRIPTION, OPTLOCK) 
@@ -33,7 +37,6 @@ INSERT INTO appraisal (last_update_date, project_id, signed_off, submit_date, ap
 VALUES (sysdate, 1, true, sysdate, 1, '2018-01-01', 11229, 'Stuart appraisal for 2018 year end', 0);
 INSERT INTO appraisal (last_update_date, project_id, signed_off, submit_date, appraisal_type, appraisal_year, employee_id, DESCRIPTION, OPTLOCK) 
 VALUES (sysdate, 1, true, sysdate, 0, '2018-01-01', 11229, 'Stuart appraisal for 2018 mid year', 0);
-
 
 INSERT INTO VOTE (SUBMIT_DATE, VOTER_EMPLOYEE_ID, APPRAISAL_APPRAISAL_TYPE, APPRAISAL_APPRAISAL_YEAR, APPRAISAL_EMPLOYEE_ID) 
 VALUES (SYSDATE, 11228, 0, '2018-01-01', 11227);

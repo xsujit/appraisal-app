@@ -1,5 +1,7 @@
 package com.company.appraisal.auth;
 
+import com.company.appraisal.services.UserDetailsServiceImpl;
+import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,11 +15,7 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
-
-import com.company.appraisal.services.UserDetailsServiceImpl;
-
-import nz.net.ultraq.thymeleaf.LayoutDialect;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 @Configuration
 @EnableWebSecurity
@@ -65,7 +63,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 	}
 	
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	protected void configure(AuthenticationManagerBuilder auth) {
 		auth.authenticationProvider(authenticationProvider());
 	}
 	

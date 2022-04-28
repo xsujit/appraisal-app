@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
 <head>
 	<link th:href="@{/open-iconic/font/css/open-iconic-bootstrap.css}" rel="stylesheet">
@@ -84,7 +84,7 @@
 		<div class="row">
 			<div class="col">
 				<a th:href="@{/team}" class="btn btn-primary m-2 mb-3" role="button">&laquo; Back </a>
-				<button type="button" th:disabled="${!eligible}" class="btn btn-primary float-right m-2 mb-3" data-toggle="modal" data-target="#confirmModal">Vote A+</button>
+				<button type="button" th:disabled="${!eligible}" class="btn btn-primary float-right m-2 mb-3" data-bs-toggle="modal" data-bs-target="#confirmModal">Vote A+</button>
 			</div>
 		</div>
 	</div>

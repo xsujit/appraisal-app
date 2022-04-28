@@ -15,8 +15,8 @@ import com.company.appraisal.entities.User;
 public class AppraisalUserPrincipal implements UserDetails {
 	
 	private static final long serialVersionUID = -2490487613804220734L;
-	private User user;
-	private List<AuthUserGroup> userGroups;
+	private final User user;
+	private final List<AuthUserGroup> userGroups;
 	
 	public AppraisalUserPrincipal(User user, List<AuthUserGroup> userGroups) {
 		super();
