@@ -1,80 +1,82 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
-  <head>
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<head>
     <title>Mastek appraisal | Register</title>
-  </head>
+</head>
 
 <body>
-	<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Register')"></nav>
-	<main role="main" class="container" layout:fragment="content">
-		
-    	<form class="form-signin" th:action="@{/register}" method="post" th:object="${registrationForm}">
-			<h3 class="h3 mb-3 font-weight-normal">Please complete the form to register</h3>
-			<div class="row">
-				<div class="col">
-					<div class="form-group">
-				    	<label for="firstName">First Name:</label>
-				    	<input type="text" class="form-control" th:field="*{firstName}" autofocus required>
-					</div>
-					<p class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Error</p>					
-				</div>
-				<div class="col">
-					<div class="form-group">
-					 	<label for="lastName">Last Name:</label>
-					 	<input type="text" class="form-control" th:field="*{lastName}" required>
-					</div>
-					<p class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					<div class="form-group">
-				    	<label for="username">Email address:</label>
-				    	<input type="email" class="form-control" th:field="*{username}" required>
-				  	</div>
-				  	<p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</p>
-				</div>
-				<div class="col">
-					<div class="form-group">
-				    	<label for="password">Password:</label>
-				    	<input type="password" class="form-control" th:field="*{password}" required>
-			  		</div>
-			  		<p class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					<div class="form-group">
-		    			<label for="employeeId">Employee ID:</label>
-		    			<input type="text" class="form-control" th:field="*{employeeId}" maxlength="5" >
-		  			</div>
-		  			<p class="text-danger" th:if="${#fields.hasErrors('employeeId')}" th:errors="*{employeeId}">Error</p>
-				</div>
-				<div class="col">
-					<div class="form-group">
-						<label for="projectId">Project</label>
-					    <select class="form-control" th:field="*{projectId}" required>
-					       <option th:each="dropDownItem : ${projects}" th:value="${dropDownItem.key}" th:text="${dropDownItem.value}" 
-					        	th:name="${dropDownItem.key}" th:disabled="${dropDownItem.key==0}"/>
-						</select>
-					</div>
-					<p class="text-danger" th:if="${#fields.hasErrors('projectId')}" th:errors="*{projectId}">Error</p>					
-				</div>				
-			</div>
-			<div class="row">
-				<div class="col">
-					<div class="form-group">
-					 	<label for="location">Location:</label>
-					 	<input type="text" class="form-control" th:field="*{location}" required>
-					</div>
-					<p class="text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Error</p>
-				</div>
-				<div class="col"></div>
-			</div>
-	      	<button class="btn btn-primary btn-lg" type="submit">Register</button>
-	      	
-    	</form>
-	</main> <!-- /.container -->
+<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Register')"></nav>
+<main class="flex-shrink-0" layout:fragment="content">
+    <div class="container">
+        <form th:action="@{/register}" method="post" th:object="${registrationForm}">
+            <h3 class="h3 mb-3 font-weight-normal">Please complete the form to register</h3>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" class="form-control" th:field="*{firstName}" autofocus required>
+                    </div>
+                    <p class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Error</p>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" class="form-control" th:field="*{lastName}" required>
+                    </div>
+                    <p class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="username">Email address:</label>
+                        <input type="email" class="form-control" th:field="*{username}" required>
+                    </div>
+                    <p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</p>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" th:field="*{password}" required>
+                    </div>
+                    <p class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="employeeId">Employee ID:</label>
+                        <input type="text" class="form-control" th:field="*{employeeId}" maxlength="5">
+                    </div>
+                    <p class="text-danger" th:if="${#fields.hasErrors('employeeId')}" th:errors="*{employeeId}">
+                        Error</p>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="projectId">Project</label>
+                        <select class="form-control" th:field="*{projectId}" required>
+                            <option th:each="dropDownItem : ${projects}" th:value="${dropDownItem.key}"
+                                    th:text="${dropDownItem.value}"
+                                    th:name="${dropDownItem.key}" th:disabled="${dropDownItem.key==0}"/>
+                        </select>
+                    </div>
+                    <p class="text-danger" th:if="${#fields.hasErrors('projectId')}" th:errors="*{projectId}">Error</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" class="form-control" th:field="*{location}" required>
+                    </div>
+                    <p class="text-danger" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Error</p>
+                </div>
+                <div class="col"></div>
+            </div>
+            <button class="mb-1 btn btn-primary btn-lg" type="submit">Register</button>
+        </form>
+    </div>
+</main>
 </body>
 </html>

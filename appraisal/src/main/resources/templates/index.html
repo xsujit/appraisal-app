@@ -1,38 +1,41 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 <head>
-	<link th:href="@{/open-iconic/font/css/open-iconic-bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/open-iconic/font/css/open-iconic-bootstrap.css}" rel="stylesheet">
     <title> Get started</title>
 </head>
 
 <body>
-	<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Home')"></nav>
-	<main role="main" class="container" layout:fragment="content">
-	<div class="jumbotron">
-	  <div class="container">
-	    <h1 class="display-3">Hello, <small>welcome to appraisal 2018</small></h1>
-	    <p>Appraisal process simplified in 4 easy steps.</p>
-	    <p><a class="btn btn-primary btn-lg" th:href="@{/appraisal}" role="button">Get started &raquo;</a></p>
-	  </div>
-	</div>
+<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Home')"></nav>
+<main class="flex-shrink-0" layout:fragment="content">
+    <div class="container">
+        <div class="mt-2">
+            <h1 class="display-3">Hello, <small>welcome to appraisal 2018</small></h1>
+            <p>Appraisal process simplified in 4 easy steps.</p>
+            <p><a class="btn btn-primary btn-lg" th:href="@{/appraisal}" role="button">Get started &raquo;</a></p>
+        </div>
 
-	<div class="card" sec:authorize="isAuthenticated()">
-		<div class="card-header">Track My Progress</div>
-		<div class="card-body">
-			<div class="progress">
-			    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" th:style="'width:'+${percentComplete}">[[${percentComplete}]]</div>
-			</div>
-			<div class="d-flex mt-3 text-muted">
-				<th:block th:each="progress, iStat : ${progressMap}">
-					<div th:class="${iStat.first} ? mr-2 : mx-2"><small th:text="${progress.getValue().getStage()}"></small></div>
-					<div class="mx-1"><span th:class="${progress.getValue().isDone()} ? 'oi oi-check'"></span></div>
-					<div class="mx-3" th:if="${!iStat.last}"> | </div>
-				</th:block>				 
-			</div>				
-		</div>
-	</div>	 
-	</main> <!-- /.container -->
+        <div class="card" sec:authorize="isAuthenticated()">
+            <div class="card-header">Track My Progress</div>
+            <div class="card-body">
+                <div class="progress">
+                    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+                         th:style="'width:'+${percentComplete}">[[${percentComplete}]]
+                    </div>
+                </div>
+                <div class="d-flex mt-3 text-muted">
+                    <th:block th:each="progress, iStat : ${progressMap}">
+                        <div th:class="${iStat.first} ? mr-2 : mx-2"><small
+                                th:text="${progress.getValue().getStage()}"></small></div>
+                        <div class="mx-1"><span th:class="${progress.getValue().isDone()} ? 'oi oi-check'"></span></div>
+                        <div class="mx-3" th:if="${!iStat.last}"> |</div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>
 

@@ -1,59 +1,59 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 <head>
-	<link th:href="@{/open-iconic/font/css/open-iconic-bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/open-iconic/font/css/open-iconic-bootstrap.css}" rel="stylesheet">
     <title>Mastek appraisal | Administration</title>
 </head>
 <body>
 <nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Admin')"></nav>
-<main role="main" class="container" layout:fragment="content">
+<main class="flex-shrink-0" layout:fragment="content">
+    <div class="container">
+        <div th:if="${param.success} or ${param.error}" th:with="check=${param.success != null ? true : false}"
+             class="alert alert-dismissible fade show" th:classappend="${check} ? 'alert-success' : 'alert-danger'"
+             role="alert">
+            <strong th:text="${check} ? 'Success! ' : 'Error! '"></strong><span
+                th:text="${check ? param.success[0] : param.error[0]}"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
-	<div th:if="${param.success} or ${param.error}" th:with="check=${param.success != null ? true : false}" 
-		class="alert alert-dismissible fade show" th:classappend="${check} ? 'alert-success' : 'alert-danger'" role="alert">
-	  <strong th:text="${check} ? 'Success! ' : 'Error! '"></strong><span th:text="${check ? param.success[0] : param.error[0]}"></span>
-	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-	    <span aria-hidden="true">&times;</span>
-	  </button>
-	</div>
+        <div class="jumbotron mb-3 p-4" th:object="${appraisalCategory}"
+             th:with="year=*{appraisalYear}, type=*{appraisalType}">
+            <h1>Appraisal <small class="text-muted" th:text="${' Year ' + #temporals.year(year.year) + ' | ' + type.description}"></small>
+            </h1>
+            <p>As a team co-ordinator, you can perform admin tasks here.</p>
+        </div>
 
-	<div class="jumbotron mb-3 p-4" th:object="${appraisalCategory}" th:with="year=*{appraisalYear}, type=*{appraisalType}">
-		<h1>Appraisal <small class="text-muted"	th:text="${' Year ' + #temporals.year(year.year) + ' | ' + type.description}"></small></h1>
-		<p>As a team co-ordinator, you can perform admin tasks here.</p>
-	</div>
-
-  	<div>
-  	<h3 class="text-muted">Team Statistics</h3>
-	<table class="table table-striped">
-			<thead>
-				<tr>
-			      	<th>Sr. No.</th>
-			      	<th>Employee Id</th>
-			        <th>First Name</th>
-			        <th>Last Name</th>
-			        <th>Email</th>
-			        <th>Appraisal</th>
-			        <th>Votes</th>
-				</tr>
-			</thead>
-		    <tbody>
-				<tr th:each="team, itemStat : *{teamStats}">
-			      	<td th:text="${itemStat.index+1}"></td>
-			      	<td th:text="${team.employee.id}"></td>
-			        <td th:text="${team.employee.firstName}"></td>
-			        <td th:text="${team.employee.lastName}"></td>
-			        <td th:text="${team.employee.user.email}"></td>
-			        <!--  <td th:text="${team.appraisal?.signedOff ? 'Y' : 'N'}"></td>-->
-			        <td><span th:text="${team.appraisal?.signedOff ? 'Done' : 'Pending'}"></span></td>
-			        <td th:text="${team.votes}"></td>
-				</tr>
-		    </tbody>
-	</table>
-	</div>
-
-	<!-- Bootstrap core JavaScript
-    ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-</main> <!-- /.container -->
+        <div>
+            <h3 class="text-muted">Team Statistics</h3>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>Employee Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Appraisal</th>
+                    <th>Votes</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="team, itemStat : *{teamStats}">
+                    <td th:text="${itemStat.index+1}"></td>
+                    <td th:text="${team.employee.id}"></td>
+                    <td th:text="${team.employee.firstName}"></td>
+                    <td th:text="${team.employee.lastName}"></td>
+                    <td th:text="${team.employee.user.email}"></td>
+                    <td><span th:text="${team.appraisal?.signedOff ? 'Done' : 'Pending'}"></span></td>
+                    <td th:text="${team.votes}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
 </body>
 </html>

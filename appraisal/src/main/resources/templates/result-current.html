@@ -1,13 +1,13 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 <head>
     <title>View your appraisal</title>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/drilldown.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
 
 <script th:inline="javascript">
 
@@ -88,14 +88,15 @@ $(function () {
 </head>
 <body>
 <nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Result')"></nav>
-	<main role="main" class="container" layout:fragment="content">
-	
-		<div id="votesChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<main class="flex-shrink-0" layout:fragment="content">
+    <div class="container">
+        <div id="votesChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
-		<div class="m-3 font-italic">
-			<a th:href="@{/result/full-year}" class="alert-link">Click here</a> to view combined mid-year and full-year results.
-		</div>
-	</main> <!-- /.container -->
+        <div class="m-3 font-italic">
+            <a th:href="@{/result/full-year}" class="alert-link">Click here</a> to view combined mid-year and full-year results.
+        </div>
+    </div>
+</main>
 </body>
 </html>
 

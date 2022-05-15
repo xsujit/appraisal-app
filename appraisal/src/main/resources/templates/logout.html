@@ -1,17 +1,20 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 <head>
-   	<title> Logout successful</title>
+    <title> Logout successful</title>
 </head>
-<body class="text-center">
-	<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Logout')"></nav>
-		<main role="main" class="container" layout:fragment="content">
-			<div class="container main-content">
-			<ul class="list-group">
-				<li class="list-group-item list-group-item-info"><h3>You have been logged out successfully</h3></li>
-			</ul>
-			<a th:href="@{/index}">Return Home</a>
-		   </div>
-	   </main>
+<body>
+<nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Logout')"></nav>
+<main class="flex-shrink-0" layout:fragment="content">
+    <div class="container">
+        <div class="mt-2">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-info"><h3>You have been logged out successfully</h3></li>
+            </ul>
+            <a th:href="@{/index}">Return Home</a>
+        </div>
+    </div>
+</main>
 </body>
 </html>

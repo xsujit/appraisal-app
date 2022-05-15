@@ -1,14 +1,12 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" lang="en">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 <head>
     <title>View your appraisal</title>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script>
-
 $(function () {
 	var seriesData = [];
 	var employees = [[${midYearResultMap.keySet()}]];
@@ -46,14 +44,14 @@ $(function () {
 </head>
 <body>
 <nav layout:fragment="navibar" th:replace="fragments/navigation.html :: navibar(activeLink='Result')"></nav>
-	<main role="main" class="container" layout:fragment="content">
-	
-		<div id="votesChart"></div>
-
-		 <div class="m-3 font-italic">
-		 	<a th:href="@{/result}" class="alert-link">Click here</a> to view current appraisal result.
-		 </div>
-	</main> <!-- /.container -->
+<main class="flex-shrink-0" layout:fragment="content">
+    <div class="container">
+        <div id="votesChart"></div>
+        <div class="m-3 font-italic">
+            <a th:href="@{/result}" class="alert-link">Click here</a> to view current appraisal result.
+        </div>
+    </div>
+</main>
 </body>
 </html>
 

@@ -1,12 +1,12 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en" class="h-100">
 
 <head th:fragment="head-fragment">
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="">
-	<meta name="author" content="">
+	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+	<meta name="generator" content="Hugo 0.84.0">
 	
 	<title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">Company	Appraisal </title>
 	
@@ -18,17 +18,17 @@
 	<link th:href="@{/css/starter-template.css}" rel="stylesheet">
 </head>
 
-<body>
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" layout:fragment="navibar"></nav>
+<body class="d-flex flex-column h-100">
+
+	<nav layout:fragment="navibar"></nav>
 	
-	<main role="main" class="container" layout:fragment="content">
+	<main layout:fragment="content">
 
 	</main>
-	<!-- /.container -->
 
-	<footer class="footer text-center">
-		<div class="container">
-			<span class="text-muted">&copy;&nbsp;Company 2018-2019</span>
+	<footer class="footer mt-auto py-3 bg-light">
+		<div class="container text-center">
+			<span class="text-muted">&copy;&nbsp;Company 2021-2022</span>
 		</div>
 	</footer>
 	<!-- Bootstrap core JavaScript
@@ -36,7 +36,7 @@
 	<!-- Placed at the end of the document so the pages load faster --> 
 	
 	<script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>
-	<script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
 
