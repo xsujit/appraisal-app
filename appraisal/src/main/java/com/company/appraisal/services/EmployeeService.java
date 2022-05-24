@@ -31,10 +31,7 @@ public class EmployeeService {
 	}
 
 	public boolean employeeIdExists(long employeeId) { // before authentication
-		if(getEmployee(employeeId) != null) {
-			return true;
-		}
-		return false;
+		return getEmployee(employeeId) != null;
 	}
 	
 	public Employee getLoggedInEmployee() {
@@ -83,7 +80,7 @@ public class EmployeeService {
 				registrationForm.getLastName(), registrationForm.getLocation());
 		List<AuthUserGroup> userGroups = new ArrayList<>();
 		userGroups.add(userGroup);
-		user.setUsergroups(userGroups);
+		user.setUserGroups(userGroups);
 		save(employee);
 	}
 	

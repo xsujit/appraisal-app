@@ -37,7 +37,7 @@ public class User implements Serializable {
 	@Column(name="ENABLED", nullable=false)
 	private boolean enabled = false;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<AuthUserGroup> usergroups = new ArrayList<>();
+	private List<AuthUserGroup> userGroups = new ArrayList<>();
 	
 	public User() {
 		super();
@@ -89,12 +89,12 @@ public class User implements Serializable {
 		this.enabled = enabled;
 	}
 
-	public List<AuthUserGroup> getUsergroups() {
-		return usergroups;
+	public List<AuthUserGroup> getUserGroups() {
+		return userGroups;
 	}
 
-	public void setUsergroups(List<AuthUserGroup> usergroups) {
-		this.usergroups = usergroups;
+	public void setUserGroups(List<AuthUserGroup> userGroups) {
+		this.userGroups = userGroups;
 	}
 
 	@Override
