@@ -16,18 +16,18 @@ public class RegistrationForm {
 	@NotBlank(message="Email is required")
 	private String username;
 	@NotBlank(message="Password is required")
-	@Size(min=6, max=14, message="Password must be between 6 and 14 characters")
+	@Size(min=6, max=20, message="Password must be between 6 and 20 characters")
 	private String password;
 	@NotBlank(message="First name is required")
 	@Pattern(regexp = "[a-zA-Z ]+", message="Only characters and space allowed")
 	private String firstName;
 	@NotBlank(message="Last name is required")
-	@Pattern(regexp = "[a-zA-Z ]+", message="Only characters and space allowed")
+	@Pattern(regexp = "[a-zA-Z ']+", message="Only characters and space allowed")
 	private String lastName;
 	@Min(value=1, message="Please select a project")
 	private long projectId;
 	@NotBlank(message="Location is required")
-	@Pattern(regexp = "[a-zA-Z ]+", message="Only characters and space allowed")
+	@Pattern(regexp = "[a-zA-Z ']+", message="Only characters and space allowed")
 	private String location;
 	
 	public long getUserId() {
